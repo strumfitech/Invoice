@@ -6,6 +6,8 @@ import Landing from './components/Landing.jsx';
 import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
+import CompanyConfig from './components/CompanyConfig.jsx';
+import ClientConfig from './components/ClientConfig.jsx';
 import NewInvoicePage from './pages/NewInvoicePage.jsx';
 import HistoryPage from './pages/HistoryPage.jsx';
 import InvoicePreview from './components/InvoicePreview.jsx';
@@ -27,6 +29,8 @@ function AppContent() {
         <Route path="/" element={user ? <Home /> : <Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/companies" element={<ProtectedRoute><CompanyConfig /></ProtectedRoute>} />
+        <Route path="/clients" element={<ProtectedRoute><ClientConfig /></ProtectedRoute>} />
         <Route path="/new" element={<ProtectedRoute><NewInvoicePage /></ProtectedRoute>} />
         <Route path="/invoices" element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
         <Route path="/invoice/:id/preview" element={<ProtectedRoute><InvoicePreview /></ProtectedRoute>} />

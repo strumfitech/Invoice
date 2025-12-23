@@ -29,6 +29,18 @@ export default function InvoiceList(){
     URL.revokeObjectURL(url);
   };
 
+  const exportSingleInvoice = (inv)=> {
+    const blob = new Blob([JSON.stringify(inv, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Factura_${inv.id}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const filtered = invoices.filter(inv => {
     const q = query.toLowerCase();
     if (!q) return true;
@@ -57,6 +69,7 @@ export default function InvoiceList(){
                 </div>
                 <div className="d-flex gap-2">
                   <Link to={`/invoice/${inv.id}/preview`} className="btn btn-sm btn-outline-primary">Preview</Link>
+                  <button className="btn btn-sm btn-outline-success" onClick={()=>exportSingleInvoice(inv)}>Export JSON</button>
                   <button className="btn btn-sm btn-outline-danger" onClick={()=>deleteInvoice(inv.id)}>Sterge</button>
                 </div>
               </div>

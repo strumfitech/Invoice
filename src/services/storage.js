@@ -13,8 +13,8 @@ export default {
           { id: 'l2', type: 'Product', name: 'Serviciu exemplu B', code: 'S-B', currencyUnit: 'pcs', vatRate: 19, quantity: 1, unitPrice: 50, lineValue: 50, lineTax: 9.5, lineTotal: 59.5 }
         ],
         subtotal: 100,
-        totalTax: 19,
-        total: 119
+        totalTax: 21,
+        total: 121
       };
       localStorage.setItem('invoices', JSON.stringify([sampleInvoice]));
       return [sampleInvoice];
@@ -36,8 +36,24 @@ export default {
   setCompany(company){
     localStorage.setItem('company', JSON.stringify(company));
   },
+  getCompanies(){
+    const raw = localStorage.getItem('companies');
+    try { return raw ? JSON.parse(raw) : []; } catch(e){ return []; }
+  },
+  saveCompanies(companies){
+    localStorage.setItem('companies', JSON.stringify(companies));
+  },
+  getClients(){
+    const raw = localStorage.getItem('clients');
+    try { return raw ? JSON.parse(raw) : []; } catch(e){ return []; }
+  },
+  saveClients(clients){
+    localStorage.setItem('clients', JSON.stringify(clients));
+  },
   clearAll(){
     localStorage.removeItem('invoices');
     localStorage.removeItem('company');
+    localStorage.removeItem('companies');
+    localStorage.removeItem('clients');
   }
 };

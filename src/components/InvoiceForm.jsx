@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import InvoiceLineItemRow from './InvoiceLineItemRow.jsx';
+import storage from '../services/storage.js';
 
 export default function InvoiceForm({ onSubmit }){
-  const [company, setCompany] = useState({ name:'', address:'', bankAccount:'', cui:'', registrationNumber:''});
-  const [recipient, setRecipient] = useState({ name:'', address:'', cui:''});
+  const [companies, setCompanies] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState('');
+  const [clients, setClients] = useState([]);
+  const [selectedClient, setSelectedClient] = useState('');
   const [lines, setLines] = useState([ { id: 1, type:'Product', name:'', code:'', currencyUnit:'pcs', vatRate:19, quantity:1, unitPrice:0, lineValue:0, lineTax:0, lineTotal:0 } ]);
 
   useEffect(()=>{
-    const c = localStorage.getItem('company');
-    if(c){ setCompany(JSON.parse(c)); }
+    const c = storage.getCompanies();
+    setCompanies(c);
+    const cl = storage.getClients();
+    setClients(cl);
   },[]);
-
-  useEffect(()=>{
-    localStorage.setItem('company', JSON.stringify(company));
-  },[company]);
 
   const updateLine = (idx, patch)=>{
     const next = lines.map((l,i)=> i===idx? {...l, ...patch}:l);
@@ -37,11 +38,17 @@ export default function InvoiceForm({ onSubmit }){
 
   const submit = (e)=>{
     e.preventDefault();
-    if(!company.name || !company.address || !company.cui || !company.registrationNumber){
-      alert('Completati detaliile companiei inainte de a salva factura.');
+    const company = companies[selectedCompany];
+    if(!company){
+      alert('Selectati o companie.');
       return;
     }
-    if(lines.length===0 || lines.some(l=>!l.name || l.unitPrice<=0 || l.quantity<=0)){ 
+    const recipient = clients[selectedClient];
+    if(!recipient){
+      alert('Selectati un client.');
+      return;
+    }
+    if(lines.length===0 || lines.some(l=>!l.name || l.unitPrice<=0 || l.quantity<=0)){
       alert('Adaugati cel putin o linie valida cu nume, pret si cantitate (>0).');
       return;
     }
@@ -51,47 +58,25 @@ export default function InvoiceForm({ onSubmit }){
   return (
     <form onSubmit={submit}>
       <div className="mb-4">
-        <h4>Detalii Companie</h4>
-        <div className="row g-3">
-          <div className="col-md-6">
-            <label className="form-label">Nume Companie</label>
-            <input className="form-control" value={company.name} onChange={e=>setCompany({...company, name:e.target.value})} />
-          </div>
-          <div className="col-md-6">
-            <label className="form-label">Adresa</label>
-            <input className="form-control" value={company.address} onChange={e=>setCompany({...company, address:e.target.value})} />
-          </div>
-          <div className="col-md-6">
-            <label className="form-label">Cont Bancar</label>
-            <input className="form-control" value={company.bankAccount} onChange={e=>setCompany({...company, bankAccount:e.target.value})} />
-          </div>
-          <div className="col-md-6">
-            <label className="form-label">CUI</label>
-            <input className="form-control" value={company.cui} onChange={e=>setCompany({...company, cui:e.target.value})} />
-          </div>
-          <div className="col-md-6">
-            <label className="form-label">Nr Inregistrare</label>
-            <input className="form-control" value={company.registrationNumber} onChange={e=>setCompany({...company, registrationNumber:e.target.value})} />
-          </div>
-        </div>
+        <h4>Selectează Companie</h4>
+        <select className="form-select" value={selectedCompany} onChange={e => setSelectedCompany(e.target.value)}>
+          <option value="">Alege o companie...</option>
+          {companies.map((comp, idx) => (
+            <option key={idx} value={idx}>{comp.name} - {comp.cui}</option>
+          ))}
+        </select>
+        {companies.length === 0 && <p className="text-muted mt-2">Nicio companie adăugată. Mergi la <a href="/companies">Configurare Societate</a>.</p>}
       </div>
 
       <div className="mb-4">
-        <h4>Destinatar Factura</h4>
-        <div className="row g-3">
-          <div className="col-md-6">
-            <label className="form-label">Nume Destinatar</label>
-            <input className="form-control" value={recipient.name} onChange={e=>setRecipient({...recipient, name:e.target.value})} />
-          </div>
-          <div className="col-md-6">
-            <label className="form-label">Adresa Destinatar</label>
-            <input className="form-control" value={recipient.address} onChange={e=>setRecipient({...recipient, address:e.target.value})} />
-          </div>
-          <div className="col-md-6">
-            <label className="form-label">CUI Destinatar</label>
-            <input className="form-control" value={recipient.cui} onChange={e=>setRecipient({...recipient, cui:e.target.value})} />
-          </div>
-        </div>
+        <h4>Selectează Client</h4>
+        <select className="form-select" value={selectedClient} onChange={e => setSelectedClient(e.target.value)}>
+          <option value="">Alege un client...</option>
+          {clients.map((cli, idx) => (
+            <option key={idx} value={idx}>{cli.name} - {cli.cui}</option>
+          ))}
+        </select>
+        {clients.length === 0 && <p className="text-muted mt-2">Niciun client adăugat. Mergi la <a href="/clients">Adauga Client</a>.</p>}
       </div>
 
       <div className="mb-3">
