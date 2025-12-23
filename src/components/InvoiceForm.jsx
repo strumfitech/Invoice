@@ -3,6 +3,7 @@ import InvoiceLineItemRow from './InvoiceLineItemRow.jsx';
 
 export default function InvoiceForm({ onSubmit }){
   const [company, setCompany] = useState({ name:'', address:'', bankAccount:'', cui:'', registrationNumber:''});
+  const [recipient, setRecipient] = useState({ name:'', address:'', cui:''});
   const [lines, setLines] = useState([ { id: 1, type:'Product', name:'', code:'', currencyUnit:'pcs', vatRate:19, quantity:1, unitPrice:0, lineValue:0, lineTax:0, lineTotal:0 } ]);
 
   useEffect(()=>{
@@ -44,7 +45,7 @@ export default function InvoiceForm({ onSubmit }){
       alert('Adaugati cel putin o linie valida cu nume, pret si cantitate (>0).');
       return;
     }
-    onSubmit({ company, lines});
+    onSubmit({ company, recipient, lines});
   };
 
   return (
@@ -71,6 +72,24 @@ export default function InvoiceForm({ onSubmit }){
           <div className="col-md-6">
             <label className="form-label">Nr Inregistrare</label>
             <input className="form-control" value={company.registrationNumber} onChange={e=>setCompany({...company, registrationNumber:e.target.value})} />
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-4">
+        <h4>Destinatar Factura</h4>
+        <div className="row g-3">
+          <div className="col-md-6">
+            <label className="form-label">Nume Destinatar</label>
+            <input className="form-control" value={recipient.name} onChange={e=>setRecipient({...recipient, name:e.target.value})} />
+          </div>
+          <div className="col-md-6">
+            <label className="form-label">Adresa Destinatar</label>
+            <input className="form-control" value={recipient.address} onChange={e=>setRecipient({...recipient, address:e.target.value})} />
+          </div>
+          <div className="col-md-6">
+            <label className="form-label">CUI Destinatar</label>
+            <input className="form-control" value={recipient.cui} onChange={e=>setRecipient({...recipient, cui:e.target.value})} />
           </div>
         </div>
       </div>

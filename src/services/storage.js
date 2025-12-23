@@ -7,6 +7,7 @@ export default {
         date: new Date().toISOString(),
         currency: 'RON',
         company: { name: 'Companie Exemplu', address: 'Strada Exemplu 1, București', bankAccount: 'RO49 0000 0000 0000 0000 0000', cui: 'CUI12345678', registrationNumber: 'NR1234/2020' },
+        recipient: { name: 'Client Exemplu', address: 'Strada Client 1, București', cui: 'CUI87654321' },
         lines: [
           { id: 'l1', type: 'Product', name: 'Produs exemplu A', code: 'P-A', currencyUnit: 'pcs', vatRate: 19, quantity: 2, unitPrice: 25, lineValue: 50, lineTax: 9.5, lineTotal: 59.5 },
           { id: 'l2', type: 'Product', name: 'Serviciu exemplu B', code: 'S-B', currencyUnit: 'pcs', vatRate: 19, quantity: 1, unitPrice: 50, lineValue: 50, lineTax: 9.5, lineTotal: 59.5 }
