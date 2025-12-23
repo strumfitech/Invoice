@@ -1,0 +1,3 @@
+:root{--bs-primary:#0d6efd;--bs-secondary:#6c757d}
+body{font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+.container{max-width:960px}
