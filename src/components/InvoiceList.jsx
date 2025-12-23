@@ -65,7 +65,7 @@ export default function InvoiceList(){
             <div key={inv.id} className="card mb-2 p-2 bg-light">
               <div className="d-flex justify-content-between align-items-center">
                 <div>
-                  <strong>Factura {inv.id}</strong> - {new Date(inv.date).toLocaleDateString()} - Total: {inv.total}
+                  <strong>Factura {inv.id}</strong> - {new Date(inv.date).toLocaleString()} - Total: {inv.total} {inv.currency}
                 </div>
                 <div className="d-flex gap-2">
                   <Link to={`/invoice/${inv.id}/preview`} className="btn btn-sm btn-outline-primary">Preview</Link>

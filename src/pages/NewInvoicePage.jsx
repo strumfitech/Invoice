@@ -8,7 +8,7 @@ export default function NewInvoicePage(){
 
   const handleSubmit = (invoice) => {
     // Ensure id and date
-    const id = String(Date.now());
+    const id = storage.getNextInvoiceId();
     const prepared = { ...invoice, id, date: new Date().toISOString() };
     // Normalize line calculations
     const lines = prepared.lines.map(l => {
@@ -20,7 +20,7 @@ export default function NewInvoicePage(){
     const subtotal = lines.reduce((a,b)=> a + b.lineValue, 0);
     const totalTax = lines.reduce((a,b)=> a + b.lineTax, 0);
     const total = lines.reduce((a,b)=> a + b.lineTotal, 0);
-    const finalInvoice = { ...prepared, lines, subtotal, totalTax, total };
+    const finalInvoice = { ...prepared, lines, subtotal, totalTax, total, currency: prepared.currency || 'RON' };
     const existing = storage.getInvoices();
     existing.push(finalInvoice);
     localStorage.setItem('invoices', JSON.stringify(existing));

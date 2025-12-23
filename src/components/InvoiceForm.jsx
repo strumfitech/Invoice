@@ -7,6 +7,8 @@ export default function InvoiceForm({ onSubmit }){
   const [selectedCompany, setSelectedCompany] = useState('');
   const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState('');
+  const [dueDate, setDueDate] = useState('');
+  const [currency, setCurrency] = useState('RON');
   const [lines, setLines] = useState([ { id: 1, type:'Product', name:'', code:'', currencyUnit:'pcs', vatRate:19, quantity:1, unitPrice:0, lineValue:0, lineTax:0, lineTotal:0 } ]);
 
   useEffect(()=>{
@@ -52,7 +54,7 @@ export default function InvoiceForm({ onSubmit }){
       alert('Adaugati cel putin o linie valida cu nume, pret si cantitate (>0).');
       return;
     }
-    onSubmit({ company, recipient, lines});
+    onSubmit({ company, recipient, dueDate, lines});
   };
 
   return (
@@ -77,6 +79,20 @@ export default function InvoiceForm({ onSubmit }){
           ))}
         </select>
         {clients.length === 0 && <p className="text-muted mt-2">Niciun client adăugat. Mergi la <a href="/clients">Adauga Client</a>.</p>}
+      </div>
+
+      <div className="mb-4">
+        <h4>Data Scadenței</h4>
+        <input type="date" className="form-control" value={dueDate} onChange={e => setDueDate(e.target.value)} />
+      </div>
+
+      <div className="mb-4">
+        <h4>Moneda</h4>
+        <select className="form-select" value={currency} onChange={e => setCurrency(e.target.value)}>
+          <option value="RON">RON</option>
+          <option value="EUR">EUR</option>
+          <option value="USD">USD</option>
+        </select>
       </div>
 
       <div className="mb-3">

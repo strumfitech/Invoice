@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import storage from '../services/storage.js';
+import { getExchangeRates, convertAmount } from '../services/currency.js';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 export default function InvoicePreview(){
   const { id } = useParams();
   const navigate = useNavigate();
+  const [rates, setRates] = useState({});
   const invoices = storage.getInvoices();
   const inv = invoices.find(v => String(v.id) === String(id));
+
+  useEffect(() => {
+    getExchangeRates().then(setRates);
+  }, []);
 
   if(!inv){
     return (
@@ -147,9 +153,9 @@ export default function InvoicePreview(){
           </tbody>
         </table>
         <div className="text-end">
-          <div><strong>Subtotal:</strong> {inv.subtotal}</div>
-          <div><strong>TVA:</strong> {inv.totalTax}</div>
-          <div><strong>Total:</strong> {inv.total}</div>
+          <div><strong>Subtotal:</strong> {inv.subtotal} {inv.currency} {inv.currency !== 'RON' && rates.RON ? `(${convertAmount(inv.subtotal, inv.currency, 'RON', rates).toFixed(2)} RON)` : ''}</div>
+          <div><strong>TVA:</strong> {inv.totalTax} {inv.currency} {inv.currency !== 'RON' && rates.RON ? `(${convertAmount(inv.totalTax, inv.currency, 'RON', rates).toFixed(2)} RON)` : ''}</div>
+          <div><strong>Total:</strong> {inv.total} {inv.currency} {inv.currency !== 'RON' && rates.RON ? `(${convertAmount(inv.total, inv.currency, 'RON', rates).toFixed(2)} RON)` : ''}</div>
         </div>
       </div>
     </div>

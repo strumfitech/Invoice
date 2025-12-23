@@ -4,7 +4,7 @@ import storage from '../services/storage.js';
 export default function ClientConfig() {
   const [clients, setClients] = useState([]);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ name: '', address: '', cui: '' });
+  const [form, setForm] = useState({ name: '', address: '', cui: '', email: '' });
 
   useEffect(() => {
     setClients(storage.getClients());
@@ -22,7 +22,7 @@ export default function ClientConfig() {
       setClients(newClients);
       storage.saveClients(newClients);
     }
-    setForm({ name: '', address: '', cui: '' });
+    setForm({ name: '', address: '', cui: '', email: '' });
   };
 
   const editClient = (index) => {
@@ -52,6 +52,10 @@ export default function ClientConfig() {
           <div className="col-md-6">
             <label className="form-label">CUI</label>
             <input className="form-control" value={form.cui} onChange={e => setForm({ ...form, cui: e.target.value })} />
+          </div>
+          <div className="col-md-6">
+            <label className="form-label">Email</label>
+            <input type="email" className="form-control" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
           </div>
         </div>
         <button type="submit" className="btn btn-primary mt-3">{editing !== null ? 'Actualizează' : 'Adaugă'} Client</button>

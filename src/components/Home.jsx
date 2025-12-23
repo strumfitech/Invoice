@@ -7,9 +7,10 @@ export default function Home(){
     <div className="container py-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1>Factura SPA Dashboard</h1>
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 flex-wrap">
           <Link to="/companies" className="btn btn-outline-secondary btn-lg">Configurare Societate</Link>
           <Link to="/clients" className="btn btn-outline-info btn-lg">Adauga Client</Link>
+          <Link to="/reminders" className="btn btn-outline-warning btn-lg">Mementouri</Link>
           <Link to="/new" className="btn btn-primary btn-lg">Adauga factura noua</Link>
         </div>
       </div>

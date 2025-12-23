@@ -3,7 +3,7 @@ export default {
     const raw = localStorage.getItem('invoices');
     if (!raw){
       const sampleInvoice = {
-        id: 'demo-1',
+        id: 1,
         date: new Date().toISOString(),
         currency: 'RON',
         company: { name: 'Companie Exemplu', address: 'Strada Exemplu 1, București', bankAccount: 'RO49 0000 0000 0000 0000 0000', cui: 'CUI12345678', registrationNumber: 'NR1234/2020' },
@@ -13,10 +13,11 @@ export default {
           { id: 'l2', type: 'Product', name: 'Serviciu exemplu B', code: 'S-B', currencyUnit: 'pcs', vatRate: 19, quantity: 1, unitPrice: 50, lineValue: 50, lineTax: 9.5, lineTotal: 59.5 }
         ],
         subtotal: 100,
-        totalTax: 21,
-        total: 121
+        totalTax: 19,
+        total: 119
       };
       localStorage.setItem('invoices', JSON.stringify([sampleInvoice]));
+      localStorage.setItem('lastInvoiceId', '1');
       return [sampleInvoice];
     }
     try {
@@ -28,6 +29,12 @@ export default {
   },
   saveInvoices(invoices){
     localStorage.setItem('invoices', JSON.stringify(invoices));
+  },
+  getNextInvoiceId(){
+    const last = localStorage.getItem('lastInvoiceId') || '0';
+    const next = parseInt(last) + 1;
+    localStorage.setItem('lastInvoiceId', next.toString());
+    return next;
   },
   getCompany(){
     const raw = localStorage.getItem('company');
