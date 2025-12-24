@@ -1,66 +1,155 @@
+import { db } from '../firebase';
+import {
+  collection,
+  doc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  getDoc,
+  setDoc
+} from 'firebase/firestore';
+
 export default {
-  getInvoices(){
-    const raw = localStorage.getItem('invoices');
-    if (!raw){
-      const sampleInvoice = {
-        id: 1,
-        date: new Date().toISOString(),
-        currency: 'RON',
-        company: { name: 'Companie Exemplu', address: 'Strada Exemplu 1, București', bankAccount: 'RO49 0000 0000 0000 0000 0000', cui: 'CUI12345678', registrationNumber: 'NR1234/2020' },
-        recipient: { name: 'Client Exemplu', address: 'Strada Client 1, București', cui: 'CUI87654321' },
-        lines: [
-          { id: 'l1', type: 'Product', name: 'Produs exemplu A', code: 'P-A', currencyUnit: 'pcs', vatRate: 19, quantity: 2, unitPrice: 25, lineValue: 50, lineTax: 9.5, lineTotal: 59.5 },
-          { id: 'l2', type: 'Product', name: 'Serviciu exemplu B', code: 'S-B', currencyUnit: 'pcs', vatRate: 19, quantity: 1, unitPrice: 50, lineValue: 50, lineTax: 9.5, lineTotal: 59.5 }
-        ],
-        subtotal: 100,
-        totalTax: 19,
-        total: 119
-      };
-      localStorage.setItem('invoices', JSON.stringify([sampleInvoice]));
-      localStorage.setItem('lastInvoiceId', '1');
-      return [sampleInvoice];
-    }
+  // Invoices
+  async getInvoices(userId) {
     try {
-      return raw ? JSON.parse(raw) : [];
-    } catch(e){
-      localStorage.setItem('invoices', JSON.stringify([]));
+      const q = query(
+        collection(db, 'invoices'),
+        where('userId', '==', userId),
+        orderBy('date', 'desc')
+      );
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    } catch (error) {
+      console.error('Error getting invoices:', error);
       return [];
     }
   },
-  saveInvoices(invoices){
-    localStorage.setItem('invoices', JSON.stringify(invoices));
+
+  async saveInvoice(invoice) {
+    try {
+      const docRef = await addDoc(collection(db, 'invoices'), invoice);
+      return docRef.id;
+    } catch (error) {
+      console.error('Error saving invoice:', error);
+      throw error;
+    }
   },
-  getNextInvoiceId(){
-    const last = localStorage.getItem('lastInvoiceId') || '0';
-    const next = parseInt(last) + 1;
-    localStorage.setItem('lastInvoiceId', next.toString());
-    return next;
+
+  async deleteInvoice(invoiceId) {
+    try {
+      await deleteDoc(doc(db, 'invoices', invoiceId));
+    } catch (error) {
+      console.error('Error deleting invoice:', error);
+      throw error;
+    }
   },
-  getCompany(){
-    const raw = localStorage.getItem('company');
-    try { return raw ? JSON.parse(raw) : { name:'', address:'', bankAccount:'', cui:'', registrationNumber:'' }; } catch(e){ return { name:'', address:'', bankAccount:'', cui:'', registrationNumber:'' }; }
+
+  async getNextInvoiceId(userId) {
+    try {
+      const settingsRef = doc(db, 'settings', userId);
+      const settingsDoc = await getDoc(settingsRef);
+
+      if (settingsDoc.exists()) {
+        const currentId = settingsDoc.data().lastInvoiceId || 0;
+        const nextId = currentId + 1;
+        await updateDoc(settingsRef, { lastInvoiceId: nextId });
+        return nextId;
+      } else {
+        // Create settings document
+        await setDoc(settingsRef, {
+          lastInvoiceId: 1,
+          currencyRates: { RON: 1, EUR: 4.9, USD: 4.6 }
+        });
+        return 1;
+      }
+    } catch (error) {
+      console.error('Error getting next invoice ID:', error);
+      return Date.now(); // Fallback
+    }
   },
-  setCompany(company){
-    localStorage.setItem('company', JSON.stringify(company));
+
+  // Companies
+  async getCompanies(userId) {
+    try {
+      const q = query(collection(db, 'companies'), where('userId', '==', userId));
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    } catch (error) {
+      console.error('Error getting companies:', error);
+      return [];
+    }
   },
-  getCompanies(){
-    const raw = localStorage.getItem('companies');
-    try { return raw ? JSON.parse(raw) : []; } catch(e){ return []; }
+
+  async saveCompany(company) {
+    try {
+      const docRef = await addDoc(collection(db, 'companies'), company);
+      return docRef.id;
+    } catch (error) {
+      console.error('Error saving company:', error);
+      throw error;
+    }
   },
-  saveCompanies(companies){
-    localStorage.setItem('companies', JSON.stringify(companies));
+
+  async updateCompany(companyId, company) {
+    try {
+      await updateDoc(doc(db, 'companies', companyId), company);
+    } catch (error) {
+      console.error('Error updating company:', error);
+      throw error;
+    }
   },
-  getClients(){
-    const raw = localStorage.getItem('clients');
-    try { return raw ? JSON.parse(raw) : []; } catch(e){ return []; }
+
+  async deleteCompany(companyId) {
+    try {
+      await deleteDoc(doc(db, 'companies', companyId));
+    } catch (error) {
+      console.error('Error deleting company:', error);
+      throw error;
+    }
   },
-  saveClients(clients){
-    localStorage.setItem('clients', JSON.stringify(clients));
+
+  // Clients
+  async getClients(userId) {
+    try {
+      const q = query(collection(db, 'clients'), where('userId', '==', userId));
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    } catch (error) {
+      console.error('Error getting clients:', error);
+      return [];
+    }
   },
-  clearAll(){
-    localStorage.removeItem('invoices');
-    localStorage.removeItem('company');
-    localStorage.removeItem('companies');
-    localStorage.removeItem('clients');
+
+  async saveClient(client) {
+    try {
+      const docRef = await addDoc(collection(db, 'clients'), client);
+      return docRef.id;
+    } catch (error) {
+      console.error('Error saving client:', error);
+      throw error;
+    }
+  },
+
+  async updateClient(clientId, client) {
+    try {
+      await updateDoc(doc(db, 'clients', clientId), client);
+    } catch (error) {
+      console.error('Error updating client:', error);
+      throw error;
+    }
+  },
+
+  async deleteClient(clientId) {
+    try {
+      await deleteDoc(doc(db, 'clients', clientId));
+    } catch (error) {
+      console.error('Error deleting client:', error);
+      throw error;
+    }
   }
 };

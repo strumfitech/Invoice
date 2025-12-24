@@ -1,28 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import storage from '../services/storage.js';
+import { useAuth } from './AuthContext.jsx';
 
 export default function CompanyConfig() {
   const [companies, setCompanies] = useState([]);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: '', address: '', bankAccount: '', cui: '', registrationNumber: '' });
+  const { user } = useAuth();
 
   useEffect(() => {
-    setCompanies(storage.getCompanies());
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (editing !== null) {
-      const updated = companies.map((c, i) => i === editing ? form : c);
-      setCompanies(updated);
-      storage.saveCompanies(updated);
-      setEditing(null);
-    } else {
-      const newCompanies = [...companies, form];
-      setCompanies(newCompanies);
-      storage.saveCompanies(newCompanies);
+    if (user) {
+      loadCompanies();
     }
-    setForm({ name: '', address: '', bankAccount: '', cui: '', registrationNumber: '' });
+  }, [user]);
+
+  const loadCompanies = async () => {
+    const data = await storage.getCompanies(user.uid);
+    setCompanies(data);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (editing !== null) {
+        await storage.updateCompany(companies[editing].id, { ...form, userId: user.uid });
+        await loadCompanies();
+        setEditing(null);
+      } else {
+        await storage.saveCompany({ ...form, userId: user.uid });
+        await loadCompanies();
+      }
+      setForm({ name: '', address: '', bankAccount: '', cui: '', registrationNumber: '' });
+    } catch (error) {
+      console.error('Error saving company:', error);
+      alert('Eroare la salvarea companiei');
+    }
   };
 
   const editCompany = (index) => {
@@ -30,10 +42,14 @@ export default function CompanyConfig() {
     setEditing(index);
   };
 
-  const deleteCompany = (index) => {
-    const updated = companies.filter((_, i) => i !== index);
-    setCompanies(updated);
-    storage.saveCompanies(updated);
+  const deleteCompany = async (index) => {
+    try {
+      await storage.deleteCompany(companies[index].id);
+      await loadCompanies();
+    } catch (error) {
+      console.error('Error deleting company:', error);
+      alert('Eroare la ștergerea companiei');
+    }
   };
 
   return (

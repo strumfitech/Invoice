@@ -1,0 +1,65 @@
+{
+  "users": [
+    {
+      "username": "test@example.com",
+      "password": "password123"
+    }
+  ],
+  "companies": [
+    {
+      "name": "Companie Test",
+      "address": "Strada Test 1, București",
+      "bankAccount": "RO49 0000 0000 0000 0000 0000",
+      "cui": "CUI12345678",
+      "registrationNumber": "NR1234/2020"
+    }
+  ],
+  "clients": [
+    {
+      "name": "Client Test",
+      "address": "Strada Client 1, București",
+      "cui": "CUI87654321",
+      "email": "client@example.com"
+    }
+  ],
+  "invoices": [
+    {
+      "id": 1,
+      "date": "2025-12-23T14:30:00.000Z",
+      "currency": "RON",
+      "company": {
+        "name": "Companie Test",
+        "address": "Strada Test 1, București",
+        "bankAccount": "RO49 0000 0000 0000 0000 0000",
+        "cui": "CUI12345678",
+        "registrationNumber": "NR1234/2020"
+      },
+      "recipient": {
+        "name": "Client Test",
+        "address": "Strada Client 1, București",
+        "cui": "CUI87654321",
+        "email": "client@example.com"
+      },
+      "dueDate": "2025-12-30T14:30:00.000Z",
+      "lines": [
+        {
+          "id": "l1",
+          "type": "Product",
+          "name": "Produs Test",
+          "code": "P-001",
+          "currencyUnit": "pcs",
+          "vatRate": 19,
+          "quantity": 2,
+          "unitPrice": 25.00,
+          "lineValue": 50.00,
+          "lineTax": 9.50,
+          "lineTotal": 59.50
+        }
+      ],
+      "subtotal": 50.00,
+      "totalTax": 9.50,
+      "total": 59.50
+    }
+  ],
+  "lastInvoiceId": "1"
+}

@@ -1,20 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import storage from '../services/storage.js';
 import { Link } from 'react-router-dom';
+import { useAuth } from './AuthContext.jsx';
 
 export default function InvoiceList(){
   const [invoices, setInvoices] = useState([]);
   const [query, setQuery] = useState('');
+  const { user } = useAuth();
 
   useEffect(()=>{
-    const data = storage.getInvoices();
-    setInvoices(data);
-  },[]);
+    if (user) {
+      loadInvoices();
+    }
+  }, [user]);
 
-  const deleteInvoice = (id)=>{
-    const updated = invoices.filter(inv => inv.id !== id);
-    setInvoices(updated);
-    storage.saveInvoices(updated);
+  const loadInvoices = async () => {
+    const data = await storage.getInvoices(user.uid);
+    setInvoices(data);
+  };
+
+  const deleteInvoice = async (invoiceId) => {
+    try {
+      await storage.deleteInvoice(invoiceId);
+      await loadInvoices(); // Reload the list
+    } catch (error) {
+      console.error('Error deleting invoice:', error);
+      alert('Eroare la ștergerea facturii');
+    }
   };
 
   const exportInvoices = ()=>{

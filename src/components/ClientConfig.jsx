@@ -1,28 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import storage from '../services/storage.js';
+import { useAuth } from './AuthContext.jsx';
 
 export default function ClientConfig() {
   const [clients, setClients] = useState([]);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: '', address: '', cui: '', email: '' });
+  const { user } = useAuth();
 
   useEffect(() => {
-    setClients(storage.getClients());
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (editing !== null) {
-      const updated = clients.map((c, i) => i === editing ? form : c);
-      setClients(updated);
-      storage.saveClients(updated);
-      setEditing(null);
-    } else {
-      const newClients = [...clients, form];
-      setClients(newClients);
-      storage.saveClients(newClients);
+    if (user) {
+      loadClients();
     }
-    setForm({ name: '', address: '', cui: '', email: '' });
+  }, [user]);
+
+  const loadClients = async () => {
+    const data = await storage.getClients(user.uid);
+    setClients(data);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (editing !== null) {
+        await storage.updateClient(clients[editing].id, { ...form, userId: user.uid });
+        await loadClients();
+        setEditing(null);
+      } else {
+        await storage.saveClient({ ...form, userId: user.uid });
+        await loadClients();
+      }
+      setForm({ name: '', address: '', cui: '', email: '' });
+    } catch (error) {
+      console.error('Error saving client:', error);
+      alert('Eroare la salvarea clientului');
+    }
   };
 
   const editClient = (index) => {
@@ -30,10 +42,14 @@ export default function ClientConfig() {
     setEditing(index);
   };
 
-  const deleteClient = (index) => {
-    const updated = clients.filter((_, i) => i !== index);
-    setClients(updated);
-    storage.saveClients(updated);
+  const deleteClient = async (index) => {
+    try {
+      await storage.deleteClient(clients[index].id);
+      await loadClients();
+    } catch (error) {
+      console.error('Error deleting client:', error);
+      alert('Eroare la ștergerea clientului');
+    }
   };
 
   return (

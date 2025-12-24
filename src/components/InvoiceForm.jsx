@@ -1,22 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import InvoiceLineItemRow from './InvoiceLineItemRow.jsx';
 import storage from '../services/storage.js';
+import { useAuth } from './AuthContext.jsx';
 
 export default function InvoiceForm({ onSubmit }){
+  const { user } = useAuth();
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState('');
   const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [currency, setCurrency] = useState('RON');
-  const [lines, setLines] = useState([ { id: 1, type:'Product', name:'', code:'', currencyUnit:'pcs', vatRate:19, quantity:1, unitPrice:0, lineValue:0, lineTax:0, lineTotal:0 } ]);
+  const [lines, setLines] = useState([ { id: 1, type:'Product', name:'', code:'', currencyUnit:'pcs', vatRate:19, quantity:1, unitPrice:0, lineValue:0, lineTotal:0 } ]);
 
   useEffect(()=>{
-    const c = storage.getCompanies();
+    if (user) {
+      loadData();
+    }
+  }, [user]);
+
+  const loadData = async () => {
+    const c = await storage.getCompanies(user.uid);
     setCompanies(c);
-    const cl = storage.getClients();
+    const cl = await storage.getClients(user.uid);
     setClients(cl);
-  },[]);
+  };
 
   const updateLine = (idx, patch)=>{
     const next = lines.map((l,i)=> i===idx? {...l, ...patch}:l);
@@ -54,7 +62,7 @@ export default function InvoiceForm({ onSubmit }){
       alert('Adaugati cel putin o linie valida cu nume, pret si cantitate (>0).');
       return;
     }
-    onSubmit({ company, recipient, dueDate, lines});
+    onSubmit({ company, recipient, dueDate, currency, lines});
   };
 
   return (
