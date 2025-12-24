@@ -23,7 +23,7 @@ export default {
         orderBy('date', 'desc')
       );
       const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      return querySnapshot.docs.map(doc => ({ firestoreId: doc.id, ...doc.data() }));
     } catch (error) {
       console.error('Error getting invoices:', error);
       return [];

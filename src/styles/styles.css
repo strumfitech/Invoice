@@ -1,3 +1,61 @@
 /* Custom styles for the Invoice SPA */
 body{background:#f8f9fa;}
 .card-custom{border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.05);}
+
+@media (max-width: 500px) {
+  .invoice-content {
+    font-size: 12px !important;
+    padding: 5px !important;
+    max-width: 100% !important;
+  }
+
+  .invoice-content h1 {
+    font-size: 1.5em !important;
+  }
+
+  .invoice-content h3 {
+    font-size: 1.2em !important;
+  }
+
+  .invoice-content h5 {
+    font-size: 1em !important;
+  }
+
+  .invoice-content .d-flex.justify-content-between {
+    align-items: stretch !important;
+  }
+
+  .invoice-content .d-flex.justify-content-between > div {
+    text-align: left !important;
+    margin-bottom: 10px !important;
+  }
+
+  .table-wrapper {
+    overflow: hidden;
+  }
+
+  .invoice-table {
+    font-size: 11px !important;
+    width: 100% !important;
+  }
+
+  .invoice-table th,
+  .invoice-table td {
+    padding: 3px !important;
+  }
+
+  .invoice-table th:nth-child(2),
+  .invoice-table td:nth-child(2) {
+    white-space: normal;
+    word-wrap: break-word;
+  }
+
+  .invoice-preview-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .back-btn {
+    font-size: 0.875rem;
+  }
+}

@@ -6,6 +6,8 @@ import { useAuth } from './AuthContext.jsx';
 export default function InvoiceList(){
   const [invoices, setInvoices] = useState([]);
   const [query, setQuery] = useState('');
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [invoiceToDelete, setInvoiceToDelete] = useState(null);
   const { user } = useAuth();
 
   useEffect(()=>{
@@ -23,9 +25,17 @@ export default function InvoiceList(){
     try {
       await storage.deleteInvoice(invoiceId);
       await loadInvoices(); // Reload the list
+      setDeleteModal(false);
+      setInvoiceToDelete(null);
     } catch (error) {
       console.error('Error deleting invoice:', error);
       alert('Eroare la ștergerea facturii');
+    }
+  };
+
+  const confirmDelete = () => {
+    if (invoiceToDelete) {
+      deleteInvoice(invoiceToDelete.firestoreId);
     }
   };
 
@@ -77,18 +87,38 @@ export default function InvoiceList(){
             <div key={inv.id} className="card mb-2 p-2 bg-light">
               <div className="d-flex justify-content-between align-items-center">
                 <div>
-                  <strong>Factura {inv.id}</strong> - {new Date(inv.date).toLocaleString()} - Total: {inv.total} {inv.currency}
+                  <strong>Factura {inv.id}</strong> - {new Date(inv.date).toLocaleString()} - Total: {Number(inv.total).toFixed(2)} {inv.currency}
                 </div>
                 <div className="d-flex gap-2">
                   <Link to={`/invoice/${inv.id}/preview`} className="btn btn-sm btn-outline-primary">Preview</Link>
                   <button className="btn btn-sm btn-outline-success" onClick={()=>exportSingleInvoice(inv)}>Export JSON</button>
-                  <button className="btn btn-sm btn-outline-danger" onClick={()=>deleteInvoice(inv.id)}>Sterge</button>
+                  <button className="btn btn-sm btn-outline-danger" onClick={() => { setInvoiceToDelete(inv); setDeleteModal(true); }}>Sterge</button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <div className={`modal fade ${deleteModal ? 'show' : ''}`} style={{ display: deleteModal ? 'block' : 'none' }} tabIndex="-1">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Confirmare Ștergere</h5>
+              <button type="button" className="btn-close" onClick={() => setDeleteModal(false)}></button>
+            </div>
+            <div className="modal-body">
+              <p>Ești sigur că vrei să ștergi factura {invoiceToDelete?.id}?</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary px-4 py-2" onClick={() => setDeleteModal(false)}>Nu</button>
+              <button type="button" className="btn btn-danger px-4 py-2" onClick={confirmDelete}>Da</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {deleteModal && <div className="modal-backdrop fade show"></div>}
     </div>
   );
 }

@@ -7,6 +7,8 @@ export default function ClientConfig() {
   const [clients, setClients] = useState([]);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: '', address: '', cui: '', email: '' });
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [clientToDelete, setClientToDelete] = useState(null);
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -44,13 +46,21 @@ export default function ClientConfig() {
     setEditing(index);
   };
 
-  const deleteClient = async (index) => {
+  const deleteClient = async (clientId) => {
     try {
-      await storage.deleteClient(clients[index].id);
+      await storage.deleteClient(clientId);
       await loadClients();
+      setDeleteModal(false);
+      setClientToDelete(null);
     } catch (error) {
       console.error('Error deleting client:', error);
       alert('Eroare la ștergerea clientului');
+    }
+  };
+
+  const confirmDelete = () => {
+    if (clientToDelete) {
+      deleteClient(clientToDelete.id);
     }
   };
 
@@ -97,12 +107,32 @@ export default function ClientConfig() {
               </div>
               <div>
                 <button className="btn btn-sm btn-outline-primary me-2" onClick={() => editClient(index)}>Editează</button>
-                <button className="btn btn-sm btn-outline-danger" onClick={() => deleteClient(index)}>Șterge</button>
+                <button className="btn btn-sm btn-outline-danger" onClick={() => { setClientToDelete(clients[index]); setDeleteModal(true); }}>Șterge</button>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <div className={`modal fade ${deleteModal ? 'show' : ''}`} style={{ display: deleteModal ? 'block' : 'none' }} tabIndex="-1">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Confirmare Ștergere</h5>
+              <button type="button" className="btn-close" onClick={() => setDeleteModal(false)}></button>
+            </div>
+            <div className="modal-body">
+              <p>Ești sigur că vrei să ștergi clientul {clientToDelete?.name}?</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary px-4 py-2" onClick={() => setDeleteModal(false)}>Nu</button>
+              <button type="button" className="btn btn-danger px-4 py-2" onClick={confirmDelete}>Da</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {deleteModal && <div className="modal-backdrop fade show"></div>}
     </div>
   );
 }

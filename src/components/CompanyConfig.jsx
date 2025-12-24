@@ -7,6 +7,8 @@ export default function CompanyConfig() {
   const [companies, setCompanies] = useState([]);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: '', address: '', bankAccount: '', cui: '', registrationNumber: '' });
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [companyToDelete, setCompanyToDelete] = useState(null);
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -44,13 +46,21 @@ export default function CompanyConfig() {
     setEditing(index);
   };
 
-  const deleteCompany = async (index) => {
+  const deleteCompany = async (companyId) => {
     try {
-      await storage.deleteCompany(companies[index].id);
+      await storage.deleteCompany(companyId);
       await loadCompanies();
+      setDeleteModal(false);
+      setCompanyToDelete(null);
     } catch (error) {
       console.error('Error deleting company:', error);
       alert('Eroare la ștergerea companiei');
+    }
+  };
+
+  const confirmDelete = () => {
+    if (companyToDelete) {
+      deleteCompany(companyToDelete.id);
     }
   };
 
@@ -101,12 +111,32 @@ export default function CompanyConfig() {
               </div>
               <div>
                 <button className="btn btn-sm btn-outline-primary me-2" onClick={() => editCompany(index)}>Editează</button>
-                <button className="btn btn-sm btn-outline-danger" onClick={() => deleteCompany(index)}>Șterge</button>
+                <button className="btn btn-sm btn-outline-danger" onClick={() => { setCompanyToDelete(companies[index]); setDeleteModal(true); }}>Șterge</button>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <div className={`modal fade ${deleteModal ? 'show' : ''}`} style={{ display: deleteModal ? 'block' : 'none' }} tabIndex="-1">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Confirmare Ștergere</h5>
+              <button type="button" className="btn-close" onClick={() => setDeleteModal(false)}></button>
+            </div>
+            <div className="modal-body">
+              <p>Ești sigur că vrei să ștergi compania {companyToDelete?.name}?</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary px-4 py-2" onClick={() => setDeleteModal(false)}>Nu</button>
+              <button type="button" className="btn btn-danger px-4 py-2" onClick={confirmDelete}>Da</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {deleteModal && <div className="modal-backdrop fade show"></div>}
     </div>
   );
 }
