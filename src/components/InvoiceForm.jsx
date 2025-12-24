@@ -11,7 +11,12 @@ export default function InvoiceForm({ onSubmit }){
   const [selectedClient, setSelectedClient] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [currency, setCurrency] = useState('RON');
-  const [lines, setLines] = useState([ { id: 1, type:'Product', name:'', code:'', currencyUnit:'pcs', vatRate:19, quantity:1, unitPrice:0, lineValue:0, lineTotal:0 } ]);
+  const [lines, setLines] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newLine, setNewLine] = useState({ type:'Product', name:'', code:'', currencyUnit:'pcs', vatRate:19, quantity:1, unitPrice:'' });
+  const [deleteLineIndex, setDeleteLineIndex] = useState(null);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [compactLines, setCompactLines] = useState(new Set());
 
   useEffect(()=>{
     if (user) {
@@ -43,11 +48,45 @@ export default function InvoiceForm({ onSubmit }){
   },[lines.length, lines.map(l=>l.unitPrice).join(','), lines.map(l=>l.quantity).join(',')]);
 
   const addLine = ()=>{
-    setLines([{ id: lines.length+1, type:'Product', name:'', code:'', currencyUnit:'pcs', vatRate:19, quantity:1, unitPrice:0, lineValue:0, lineTax:0, lineTotal:0 }, ...lines]);
+    if (window.innerWidth < 500) {
+      setShowAddModal(true);
+    } else {
+      setLines([{ id: lines.length+1, type:'Product', name:'', code:'', currencyUnit:'pcs', vatRate:19, quantity:1, unitPrice:'', lineValue:0, lineTax:0, lineTotal:0 }, ...lines]);
+    }
+  };
+
+  const addNewLine = () => {
+    const lineValue = newLine.unitPrice * newLine.quantity;
+    const lineTax = (newLine.vatRate / 100) * newLine.unitPrice * newLine.quantity;
+    const lineTotal = lineValue + lineTax;
+    setLines([{ id: lines.length+1, ...newLine, lineValue, lineTax, lineTotal }, ...lines]);
+    setNewLine({ type:'Product', name:'', code:'', currencyUnit:'pcs', vatRate:19, quantity:1, unitPrice:'' });
+    setShowAddModal(false);
+  };
+
+  const deleteLine = () => {
+    if (deleteLineIndex !== null) {
+      setLines(lines.filter((_, i) => i !== deleteLineIndex));
+      setDeleteLineIndex(null);
+    }
+  };
+
+  const toggleCompact = (idx) => {
+    const newCompact = new Set(compactLines);
+    if (newCompact.has(idx)) {
+      newCompact.delete(idx);
+    } else {
+      newCompact.add(idx);
+    }
+    setCompactLines(newCompact);
   };
 
   const submit = (e)=>{
     e.preventDefault();
+    setShowSaveModal(true);
+  };
+
+  const confirmSave = () => {
     const company = companies[selectedCompany];
     if(!company){
       alert('Selectati o companie.');
@@ -63,6 +102,7 @@ export default function InvoiceForm({ onSubmit }){
       return;
     }
     onSubmit({ company, recipient, dueDate, currency, lines});
+    setShowSaveModal(false);
   };
 
   return (
@@ -104,40 +144,172 @@ export default function InvoiceForm({ onSubmit }){
       </div>
 
       <div className="mb-3">
-        <h4>Linii Factura</h4>
-        <div className="table-responsive">
-          <table className="table table-sm">
-            <thead>
-              <tr>
-                <th style={{ minWidth: '80px' }}>Tip</th>
-                <th style={{ minWidth: '150px' }}>Denumire articol</th>
-                <th style={{ minWidth: '80px' }}>Cod</th>
-                <th style={{ minWidth: '70px' }}>Unitati</th>
-                <th style={{ minWidth: '60px' }}>TVA %</th>
-                <th style={{ minWidth: '80px' }}>Cantitate</th>
-                <th style={{ minWidth: '90px' }}>Pret Unitar</th>
-                <th style={{ minWidth: '80px' }}>Valoare</th>
-                <th style={{ minWidth: '80px' }}>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {lines.map((line, idx)=> (
-                <InvoiceLineItemRow key={line.id} index={idx} line={line} onChange={(updates)=>{
-                  const next = lines.map((l,i)=> i===idx ? { ...l, ...updates } : l);
-                  setLines(next);
-                }} />
-              ))}
-            </tbody>
-          </table>
+        <h4>Produse</h4>
+        <div className="row">
+          {lines.map((line, idx) => (
+            <div key={line.id} className="col-12 col-md-6 mb-3">
+              <div className="card">
+                <div className="card-body">
+                  {compactLines.has(idx) ? (
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span><strong>{line.name}</strong> - Total: {Number(line.lineTotal).toFixed(2)} {currency}</span>
+                      <div>
+                        <button className="btn btn-outline-secondary btn-sm me-2" onClick={() => toggleCompact(idx)}>Extinde</button>
+                        <button className="btn btn-danger btn-sm" onClick={() => setDeleteLineIndex(idx)}>Șterge</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="row g-2">
+                        <div className="col-3">
+                          <label className="form-label">Tip</label>
+                          <select className="form-select form-select-sm" value={line.type} onChange={e => updateLine(idx, { type: e.target.value })}>
+                            <option value="Product">Produs/Serviciu</option>
+                          </select>
+                        </div>
+                        <div className="col-9">
+                          <label className="form-label">Denumire articol</label>
+                          <input className="form-control form-control-sm" value={line.name} onChange={e => updateLine(idx, { name: e.target.value })} />
+                        </div>
+                        <div className="col-3">
+                          <label className="form-label">Cod</label>
+                          <input className="form-control form-control-sm" value={line.code} onChange={e => updateLine(idx, { code: e.target.value })} />
+                        </div>
+                        <div className="col-3">
+                          <label className="form-label">Unitati</label>
+                          <select className="form-select form-select-sm" value={line.currencyUnit} onChange={e => updateLine(idx, { currencyUnit: e.target.value })}>
+                            <option value="pcs">Bucati</option>
+                            <option value="set">Set</option>
+                          </select>
+                        </div>
+                        <div className="col-3">
+                          <label className="form-label">TVA %</label>
+                          <input className="form-control form-control-sm" type="number" value={line.vatRate} onChange={e => updateLine(idx, { vatRate: Number(e.target.value) })} />
+                        </div>
+                        <div className="col-3">
+                          <label className="form-label">Cantitate</label>
+                          <input className="form-control form-control-sm" type="number" value={line.quantity} onChange={e => updateLine(idx, { quantity: Number(e.target.value) })} />
+                        </div>
+                        <div className="col-6">
+                          <label className="form-label">Pret Unitar</label>
+                          <input className="form-control form-control-sm" type="number" step="0.01" value={line.unitPrice} onChange={e => updateLine(idx, { unitPrice: Number(e.target.value) })} />
+                        </div>
+                        <div className="col-6">
+                          <label className="form-label">Total</label>
+                          <input className="form-control form-control-sm" readOnly value={Number(line.lineTotal).toFixed(2)} />
+                        </div>
+                      </div>
+                      <div className="mt-3 d-flex justify-content-between">
+                        <button className="btn btn-outline-info btn-sm" onClick={() => toggleCompact(idx)}>Compactează</button>
+                        <button className="btn btn-danger btn-sm" onClick={() => setDeleteLineIndex(idx)}>Șterge</button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
         <div className="mt-3">
-          <button type="button" className="btn btn-secondary" onClick={addLine}>Adauga Linie</button>
+          <button type="button" className="btn btn-secondary" onClick={addLine}>Adauga Produse</button>
         </div>
       </div>
 
-      <div className="mb-3">
-        <button className="btn btn-primary" type="submit">Salveaza Factura</button>
+      <div className="mb-3 text-center mt-5">
+        <button className="btn btn-success" type="submit">Salveaza Factura</button>
       </div>
+
+      {/* Add Line Modal */}
+      <div className={`modal fade ${showAddModal ? 'show' : ''}`} style={{ display: showAddModal ? 'block' : 'none' }} tabIndex="-1">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Adaugă Linie</h5>
+              <button type="button" className="btn-close" onClick={() => setShowAddModal(false)}></button>
+            </div>
+            <div className="modal-body">
+              <div className="mb-3">
+                <label className="form-label">Tip</label>
+                <select className="form-select" value={newLine.type} onChange={e => setNewLine({ ...newLine, type: e.target.value })}>
+                  <option value="Product">Produs/Serviciu</option>
+                </select>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Denumire articol</label>
+                <input className="form-control" value={newLine.name} onChange={e => setNewLine({ ...newLine, name: e.target.value })} />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Cod</label>
+                <input className="form-control" value={newLine.code} onChange={e => setNewLine({ ...newLine, code: e.target.value })} />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Unitati</label>
+                <select className="form-select" value={newLine.currencyUnit} onChange={e => setNewLine({ ...newLine, currencyUnit: e.target.value })}>
+                  <option value="pcs">Bucati</option>
+                  <option value="set">Set</option>
+                </select>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">TVA %</label>
+                <input className="form-control" type="number" value={newLine.vatRate} onChange={e => setNewLine({ ...newLine, vatRate: Number(e.target.value) })} />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Cantitate</label>
+                <input className="form-control" type="number" value={newLine.quantity} onChange={e => setNewLine({ ...newLine, quantity: Number(e.target.value) })} />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Pret Unitar</label>
+                <input className="form-control" type="number" step="0.01" value={newLine.unitPrice} onChange={e => setNewLine({ ...newLine, unitPrice: Number(e.target.value) })} />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={() => setShowAddModal(false)}>Anulează</button>
+              <button type="button" className="btn btn-primary" onClick={addNewLine}>Adaugă</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {showAddModal && <div className="modal-backdrop fade show"></div>}
+
+      {/* Delete Line Modal */}
+      <div className={`modal fade ${deleteLineIndex !== null ? 'show' : ''}`} style={{ display: deleteLineIndex !== null ? 'block' : 'none' }} tabIndex="-1">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Confirmare Ștergere</h5>
+              <button type="button" className="btn-close" onClick={() => setDeleteLineIndex(null)}></button>
+            </div>
+            <div className="modal-body">
+              <p>Ești sigur că vrei să ștergi această linie?</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={() => setDeleteLineIndex(null)}>Nu</button>
+              <button type="button" className="btn btn-danger" onClick={deleteLine}>Da</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {deleteLineIndex !== null && <div className="modal-backdrop fade show"></div>}
+
+      {/* Save Confirmation Modal */}
+      <div className={`modal fade ${showSaveModal ? 'show' : ''}`} style={{ display: showSaveModal ? 'block' : 'none' }} tabIndex="-1">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Confirmare Salvare</h5>
+              <button type="button" className="btn-close" onClick={() => setShowSaveModal(false)}></button>
+            </div>
+            <div className="modal-body">
+              <p>Ești sigur că vrei să salvezi factura?</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={() => setShowSaveModal(false)}>Nu</button>
+              <button type="button" className="btn btn-primary" onClick={confirmSave}>Da</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {showSaveModal && <div className="modal-backdrop fade show"></div>}
     </form>
   );
 }

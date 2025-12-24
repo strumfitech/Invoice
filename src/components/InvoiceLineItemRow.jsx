@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function InvoiceLineItemRow({ index, line, onChange }){
+export default function InvoiceLineItemRow({ index, line, onChange, onDelete }){
   const handle = (field, value) => {
     onChange && onChange({ [field]: value });
   };
@@ -37,6 +37,9 @@ export default function InvoiceLineItemRow({ index, line, onChange }){
       </td>
       <td>
         <input className="form-control form-control-sm" placeholder="Total" readOnly value={line?.lineTotal ?? ''} />
+      </td>
+      <td>
+        <button className="btn btn-sm btn-danger" onClick={onDelete}>×</button>
       </td>
     </tr>
   );

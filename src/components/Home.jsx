@@ -5,9 +5,9 @@ import InvoiceList from './InvoiceList.jsx';
 export default function Home(){
   return (
     <div className="container py-5">
-      <div className="mb-4">
-        <h1 className="text-center mb-4">Generare factura</h1>
-        <div className="text-center mb-3">
+      <div className="mb-5">
+        <h1 className="text-center mb-5">Generare factura</h1>
+        <div className="text-center mb-4">
           <Link to="/new" className="btn btn-primary">Adauga factura noua</Link>
         </div>
         <div className="d-flex gap-2 justify-content-center flex-wrap">

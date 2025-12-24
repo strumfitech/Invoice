@@ -39,7 +39,7 @@ export default function NewInvoicePage(){
           ← Înapoi la Dashboard
         </button>
       </div>
-      <h2 className="mb-3">Creează Factură</h2>
+      <h2 className="text-center mb-5">Creează Factură</h2>
       <InvoiceForm onSubmit={handleSubmit} />
     </div>
   );
