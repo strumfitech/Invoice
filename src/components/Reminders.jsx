@@ -1,22 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import storage from '../services/storage.js';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext.jsx';
 
 export default function Reminders() {
   const [invoices, setInvoices] = useState([]);
   const [overdue, setOverdue] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
-    const invs = storage.getInvoices();
-    setInvoices(invs);
-    const now = new Date();
-    const over = invs.filter(inv => inv.dueDate && new Date(inv.dueDate) < now);
-    const up = invs.filter(inv => inv.dueDate && new Date(inv.dueDate) >= now && new Date(inv.dueDate) <= new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)); // next 7 days
-    setOverdue(over);
-    setUpcoming(up);
-  }, []);
+    if (user) {
+      loadInvoices();
+    }
+  }, [user]);
+
+  const loadInvoices = async () => {
+    try {
+      const invs = await storage.getInvoices(user.uid);
+      setInvoices(invs);
+      const now = new Date();
+      const over = invs.filter(inv => inv.dueDate && new Date(inv.dueDate) < now);
+      const up = invs.filter(inv => inv.dueDate && new Date(inv.dueDate) >= now && new Date(inv.dueDate) <= new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)); // next 7 days
+      setOverdue(over);
+      setUpcoming(up);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading invoices:', error);
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="container py-5 text-center">Se încarcă...</div>;
+  }
 
   const sendReminder = (inv) => {
     // Simulate sending email

@@ -2,19 +2,44 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import storage from '../services/storage.js';
 import { getExchangeRates, convertAmount } from '../services/currency.js';
+import { useAuth } from './AuthContext.jsx';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 export default function InvoicePreview(){
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [rates, setRates] = useState({});
-  const invoices = storage.getInvoices();
-  const inv = invoices.find(v => String(v.id) === String(id));
+  const [invoices, setInvoices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      loadInvoices();
+    }
+  }, [user]);
 
   useEffect(() => {
     getExchangeRates().then(setRates);
   }, []);
+
+  const loadInvoices = async () => {
+    try {
+      const data = await storage.getInvoices(user.uid);
+      setInvoices(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading invoices:', error);
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="container py-5 text-center">Se încarcă...</div>;
+  }
+
+  const inv = invoices.find(v => String(v.id) === String(id));
 
   if(!inv){
     return (
@@ -100,7 +125,7 @@ export default function InvoicePreview(){
           <button className="btn btn-outline-primary" onClick={handlePreviewInvoice}>Preview Invoice</button>
         </div>
       </div>
-      <div id="invoice-content" style={{ backgroundColor: 'white', padding: '25mm', minHeight: '247mm', boxSizing: 'border-box' }}>
+      <div id="invoice-content" style={{ backgroundColor: 'white', padding: '8mm', minHeight: '247mm', boxSizing: 'border-box', maxWidth: '210mm', margin: '0 auto', fontSize: '14px', lineHeight: '1.4' }}>
         <div className="d-flex justify-content-between mb-4">
           <div style={{ flex: 1 }}>
             <h5>Companie:</h5>
@@ -122,32 +147,32 @@ export default function InvoicePreview(){
             <div>CUI: {recipient.cui || ''}</div>
           </div>
         </div>
-        <table className="table table-bordered" style={{ marginBottom: '20px' }}>
+        <table style={{ marginBottom: '20px', borderCollapse: 'collapse', width: '100%', border: '1px solid black' }}>
           <thead>
             <tr>
-              <th style={{ padding: '10px' }}>Tip</th>
-              <th style={{ padding: '10px' }}>Denumire articol</th>
-              <th style={{ padding: '10px' }}>Cod</th>
-              <th style={{ padding: '10px' }}>Unitati</th>
-              <th style={{ padding: '10px' }}>TVA %</th>
-              <th style={{ padding: '10px' }}>Cantitate</th>
-              <th style={{ padding: '10px' }}>Pret Unitar</th>
-              <th style={{ padding: '10px' }}>Valoare</th>
-              <th style={{ padding: '10px' }}>Total</th>
+              <th style={{ padding: '10px', border: '1px solid black' }}>Tip</th>
+              <th style={{ padding: '10px', border: '1px solid black' }}>Denumire articol</th>
+              <th style={{ padding: '10px', border: '1px solid black' }}>Cod</th>
+              <th style={{ padding: '10px', border: '1px solid black' }}>Unitati</th>
+              <th style={{ padding: '10px', border: '1px solid black' }}>TVA %</th>
+              <th style={{ padding: '10px', border: '1px solid black' }}>Cantitate</th>
+              <th style={{ padding: '10px', border: '1px solid black' }}>Pret Unitar</th>
+              <th style={{ padding: '10px', border: '1px solid black' }}>Valoare</th>
+              <th style={{ padding: '10px', border: '1px solid black' }}>Total</th>
             </tr>
           </thead>
           <tbody>
             {lines.map((ln) => (
               <tr key={ln.id}>
-                <td style={{ padding: '10px' }}>{ln.type}</td>
-                <td style={{ padding: '10px' }}>{ln.name}</td>
-                <td style={{ padding: '10px' }}>{ln.code}</td>
-                <td style={{ padding: '10px' }}>{ln.currencyUnit}</td>
-                <td style={{ padding: '10px' }}>{ln.vatRate}</td>
-                <td style={{ padding: '10px' }}>{ln.quantity}</td>
-                <td style={{ padding: '10px' }}>{ln.unitPrice}</td>
-                <td style={{ padding: '10px' }}>{ln.lineValue}</td>
-                <td style={{ padding: '10px' }}>{ln.lineTotal}</td>
+                <td style={{ padding: '10px', border: '1px solid black' }}>{ln.type}</td>
+                <td style={{ padding: '10px', border: '1px solid black' }}>{ln.name}</td>
+                <td style={{ padding: '10px', border: '1px solid black' }}>{ln.code}</td>
+                <td style={{ padding: '10px', border: '1px solid black' }}>{ln.currencyUnit}</td>
+                <td style={{ padding: '10px', border: '1px solid black' }}>{ln.vatRate}</td>
+                <td style={{ padding: '10px', border: '1px solid black' }}>{ln.quantity}</td>
+                <td style={{ padding: '10px', border: '1px solid black' }}>{ln.unitPrice}</td>
+                <td style={{ padding: '10px', border: '1px solid black' }}>{ln.lineValue}</td>
+                <td style={{ padding: '10px', border: '1px solid black' }}>{ln.lineTotal}</td>
               </tr>
             ))}
           </tbody>
