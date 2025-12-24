@@ -82,17 +82,25 @@ export default function InvoiceList(){
       {filtered.length === 0 ? (
         <p>Nicio factura salvata.</p>
       ) : (
-        <div className="list-group">
+        <div className="row">
           {filtered.map(inv => (
-            <div key={inv.id} className="card mb-2 p-2 bg-light">
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <strong>Factura {inv.id}</strong> - {new Date(inv.date).toLocaleString()} - Total: {Number(inv.total).toFixed(2)} {inv.currency}
-                </div>
-                <div className="d-flex gap-2">
-                  <Link to={`/invoice/${inv.id}/preview`} className="btn btn-sm btn-outline-primary">Preview</Link>
-                  <button className="btn btn-sm btn-outline-success" onClick={()=>exportSingleInvoice(inv)}>Export JSON</button>
-                  <button className="btn btn-sm btn-outline-danger" onClick={() => { setInvoiceToDelete(inv); setDeleteModal(true); }}>Sterge</button>
+            <div key={inv.id} className="col-12 col-md-6 mb-4">
+              <div className="card h-100">
+                <div className="card-body d-flex flex-column">
+                  <div className="flex-grow-1">
+                    <h5 className="card-title">Factura {inv.id}</h5>
+                    <p className="card-text">
+                      Data: {new Date(inv.date).toLocaleString()}<br />
+                      Total: {Number(inv.total).toFixed(2)} {inv.currency}
+                    </p>
+                  </div>
+                  <div className="mt-auto">
+                    <div className="d-flex gap-2 justify-content-center">
+                      <Link to={`/invoice/${inv.id}/preview`} className="btn btn-primary">Preview</Link>
+                      <button className="btn btn-success" onClick={()=>exportSingleInvoice(inv)}>Export JSON</button>
+                      <button className="btn btn-danger" onClick={() => { setInvoiceToDelete(inv); setDeleteModal(true); }}>Sterge</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

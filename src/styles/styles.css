@@ -58,4 +58,18 @@ body{background:#f8f9fa;}
   .back-btn {
     font-size: 0.875rem;
   }
+
+  .card .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .card .mt-auto {
+    margin-top: 0.5rem !important;
+  }
+
+  .home-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
 }

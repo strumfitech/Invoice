@@ -5,13 +5,15 @@ import InvoiceList from './InvoiceList.jsx';
 export default function Home(){
   return (
     <div className="container py-5">
-      <div className="d-flex justify-content-between align-items-center mb-4 flex-column flex-md-row">
-        <h1 className="mb-3 mb-md-0">Generare factura</h1>
-        <div className="d-flex gap-2 flex-wrap justify-content-center">
-          <Link to="/companies" className="btn btn-outline-secondary">Configurare Societate</Link>
-          <Link to="/clients" className="btn btn-outline-info">Adauga Client</Link>
-          <Link to="/reminders" className="btn btn-outline-warning">Mementouri</Link>
+      <div className="mb-4">
+        <h1 className="text-center mb-4">Generare factura</h1>
+        <div className="text-center mb-3">
           <Link to="/new" className="btn btn-primary">Adauga factura noua</Link>
+        </div>
+        <div className="d-flex gap-2 justify-content-center flex-wrap">
+          <Link to="/companies" className="btn btn-secondary home-btn">Configurare Societate</Link>
+          <Link to="/clients" className="btn btn-secondary home-btn">Adauga Client</Link>
+          <Link to="/reminders" className="btn btn-secondary home-btn">Mementouri</Link>
         </div>
       </div>
       <InvoiceList />

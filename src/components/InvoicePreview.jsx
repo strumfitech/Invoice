@@ -13,6 +13,8 @@ export default function InvoicePreview(){
   const [rates, setRates] = useState({});
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [previewModal, setPreviewModal] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -88,27 +90,8 @@ export default function InvoicePreview(){
     const element = document.getElementById('invoice-content');
     html2canvas(element).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF();
-      const imgWidth = 210;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-
-      let position = 0;
-
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      const pdfBlob = pdf.output('blob');
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      window.open(pdfUrl, '_blank');
+      setPreviewImage(imgData);
+      setPreviewModal(true);
     });
   };
 
@@ -185,6 +168,25 @@ export default function InvoicePreview(){
           <div><strong>Total:</strong> {Number(inv.total).toFixed(2)} {inv.currency} {inv.currency !== 'RON' && rates.RON ? `(${convertAmount(inv.total, inv.currency, 'RON', rates).toFixed(2)} RON)` : ''}</div>
         </div>
       </div>
+
+      {/* Preview Modal */}
+      <div className={`modal fade ${previewModal ? 'show' : ''}`} style={{ display: previewModal ? 'block' : 'none' }} tabIndex="-1">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Preview Factură</h5>
+              <button type="button" className="btn-close" onClick={() => setPreviewModal(false)}></button>
+            </div>
+            <div className="modal-body text-center">
+              {previewImage && <img src={previewImage} alt="Factura Preview" style={{ maxWidth: '100%', height: 'auto' }} />}
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={() => setPreviewModal(false)}>Închide</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {previewModal && <div className="modal-backdrop fade show"></div>}
     </div>
   );
 }
