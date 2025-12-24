@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import storage from '../services/storage.js';
 import { useAuth } from './AuthContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function CompanyConfig() {
   const [companies, setCompanies] = useState([]);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name: '', address: '', bankAccount: '', cui: '', registrationNumber: '' });
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -54,6 +56,11 @@ export default function CompanyConfig() {
 
   return (
     <div className="container py-5">
+      <div className="mb-3">
+        <button className="btn btn-outline-secondary" onClick={() => navigate('/')}>
+          ← Înapoi la Dashboard
+        </button>
+      </div>
       <h2>Configurare Societate</h2>
       <form onSubmit={handleSubmit} className="mb-4">
         <div className="row g-3">

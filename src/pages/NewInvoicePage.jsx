@@ -34,6 +34,11 @@ export default function NewInvoicePage(){
 
   return (
     <div className="container my-4">
+      <div className="mb-3">
+        <button className="btn btn-outline-secondary" onClick={() => navigate('/')}>
+          ← Înapoi la Dashboard
+        </button>
+      </div>
       <h2 className="mb-3">Creează Factură</h2>
       <InvoiceForm onSubmit={handleSubmit} />
     </div>

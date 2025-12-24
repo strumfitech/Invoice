@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import storage from '../services/storage.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function Reminders() {
   const [invoices, setInvoices] = useState([]);
   const [overdue, setOverdue] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const invs = storage.getInvoices();
@@ -23,6 +25,11 @@ export default function Reminders() {
 
   return (
     <div className="container py-5">
+      <div className="mb-3">
+        <button className="btn btn-outline-secondary" onClick={() => navigate('/')}>
+          ← Înapoi la Dashboard
+        </button>
+      </div>
       <h2>Mementouri și Notificări</h2>
 
       <h3 className="text-danger mt-4">Facturi Scadente</h3>
