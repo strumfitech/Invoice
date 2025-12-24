@@ -105,30 +105,34 @@ export default function InvoiceForm({ onSubmit }){
 
       <div className="mb-3">
         <h4>Linii Factura</h4>
-        <table className="table table-sm">
-          <thead>
-            <tr>
-              <th>Tip</th>
-              <th>Denumire articol</th>
-              <th>Cod</th>
-              <th>Unitati</th>
-              <th>TVA %</th>
-              <th>Cantitate</th>
-              <th>Pret Unitar</th>
-              <th>Valoare</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lines.map((line, idx)=> (
-              <InvoiceLineItemRow key={line.id} index={idx} line={line} onChange={(updates)=>{
-                const next = lines.map((l,i)=> i===idx ? { ...l, ...updates } : l);
-                setLines(next);
-              }} />
-            ))}
-          </tbody>
-        </table>
-        <button type="button" className="btn btn-secondary" onClick={addLine}>Adauga Linie</button>
+        <div className="table-responsive">
+          <table className="table table-sm">
+            <thead>
+              <tr>
+                <th style={{ minWidth: '80px' }}>Tip</th>
+                <th style={{ minWidth: '150px' }}>Denumire articol</th>
+                <th style={{ minWidth: '80px' }}>Cod</th>
+                <th style={{ minWidth: '70px' }}>Unitati</th>
+                <th style={{ minWidth: '60px' }}>TVA %</th>
+                <th style={{ minWidth: '80px' }}>Cantitate</th>
+                <th style={{ minWidth: '90px' }}>Pret Unitar</th>
+                <th style={{ minWidth: '80px' }}>Valoare</th>
+                <th style={{ minWidth: '80px' }}>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lines.map((line, idx)=> (
+                <InvoiceLineItemRow key={line.id} index={idx} line={line} onChange={(updates)=>{
+                  const next = lines.map((l,i)=> i===idx ? { ...l, ...updates } : l);
+                  setLines(next);
+                }} />
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-3">
+          <button type="button" className="btn btn-secondary" onClick={addLine}>Adauga Linie</button>
+        </div>
       </div>
 
       <div className="mb-3">
