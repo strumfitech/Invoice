@@ -1,80 +1,53 @@
-const { onRequest } = require('firebase-functions/v2/https');
-const logger = require('firebase-functions/logger');
-const axios = require('axios');
-const cors = require('cors');
+const functions = require("firebase-functions");
+const fetch = require("node-fetch");
 
-// 🔐 CONFIG CORS
-const corsHandler = cors({
-  origin: [
-    'http://localhost:5174',
-    'http://localhost:3000',
-    'https://factura-b478b.web.app',
-    'https://factura-b478b.firebaseapp.com',
-  ],
-  methods: ['POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-});
+exports.getFirmaByCUI = functions
+  .region("us-central1")
+  .https.onRequest(async (req, res) => {
 
-// 📌 CLOUD FUNCTION
-exports.getFirmaByCUI = onRequest(
-  {
-    region: 'us-central1',
-    timeoutSeconds: 60,
-    memory: '256MiB',
-  },
-  (req, res) => {
-    corsHandler(req, res, async () => {
-      try {
-        // 🛑 Allow only POST
-        if (req.method !== 'POST') {
-          return res.status(405).json({ error: 'Method Not Allowed' });
-        }
+    // =========================
+    // ✅ CORS HEADERS
+    // =========================
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
 
-        // 🛑 Validate body
-        if (!Array.isArray(req.body)) {
-          return res.status(400).json({
-            error: 'Request body must be an array: [{ cui: number }]',
-          });
-        }
+    // =========================
+    // ✅ PRE-FLIGHT
+    // =========================
+    if (req.method === "OPTIONS") {
+      return res.status(204).send("");
+    }
 
-        const payload = req.body.map((item) => ({
-          cui: Number(item.cui),
-        }));
+    // =========================
+    // ❌ ONLY POST
+    // =========================
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Method not allowed" });
+    }
 
-        // 🛑 Validate CUI values
-        if (payload.some((p) => !p.cui || isNaN(p.cui))) {
-          return res.status(400).json({
-            error: 'Invalid CUI value',
-          });
-        }
+    try {
+      const { cui } = req.body;
 
-        logger.info('ANAF request payload', payload);
-
-        // 📡 CALL ANAF API
-        const anafResponse = await axios.post(
-          'https://webservicesp.anaf.ro/PlatitorTvaRest/api/v8/ws/tva',
-          payload,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            timeout: 30000,
-          }
-        );
-
-        // ✅ SUCCESS
-        return res.status(200).json({
-          found: anafResponse.data.found || [],
-          notFound: anafResponse.data.notFound || [],
-        });
-      } catch (error) {
-        logger.error('ANAF API ERROR', error);
-
-        return res.status(500).json({
-          error: 'Internal Server Error',
-          message: error.message,
-        });
+      if (!cui || isNaN(cui)) {
+        return res.status(400).json({ error: "CUI invalid" });
       }
-    });
-  }
-);
+
+      const anafResponse = await fetch(
+        "https://webservicesp.anaf.ro/PlatitorTvaRest/api/v8/ws/tva",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify([{ cui, data: new Date().toISOString().slice(0, 10) }]),
+        }
+      );
+
+      const data = await anafResponse.json();
+
+      return res.status(200).json(data);
+
+    } catch (err) {
+      console.error("ANAF error:", err);
+      return res.status(500).json({ error: "Eroare ANAF" });
+    }
+  });
