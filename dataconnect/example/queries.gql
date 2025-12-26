@@ -1,0 +1,52 @@
+mutation CreateInvoice($clientId: UUID, $currency: String, $discountPercentage: Float, $dueDate: Date!, $invoiceNumber: String!, $issueDate: Date!, $notes: String, $status: String!, $taxPercentage: Float, $totalAmount: Float!) @auth(level: USER) {
+  invoice_insert(data: {clientId: $clientId, currency: $currency, discountPercentage: $discountPercentage, dueDate: $dueDate, invoiceNumber: $invoiceNumber, issueDate: $issueDate, notes: $notes, status: $status, taxPercentage: $taxPercentage, totalAmount: $totalAmount, userId_expr: "auth.uid"})
+}
+
+query ListInvoicesForUser @auth(level: USER) {
+  invoices(where: {userId: {eq_expr: "auth.uid"}}) {
+    id
+    invoiceNumber
+    dueDate
+    totalAmount
+    status
+  }
+}
+
+mutation UpdateInvoiceStatus($id: UUID!, $status: String!) @auth(level: USER) {
+  invoice_update(key: {id: $id}, data: {status: $status})
+}
+
+query GetInvoiceDetails($id: UUID!) @auth(level: USER) {
+  invoice(id: $id) {
+    id
+    invoiceNumber
+    issueDate
+    dueDate
+    status
+    currency
+    discountPercentage
+    taxPercentage
+    totalAmount
+    notes
+    client {
+      id
+      name
+      email
+      phoneNumber
+    }
+    invoiceItems_on_invoice {
+      id
+      description
+      quantity
+      unitPrice
+      taxAmount
+      lineTotal
+      productOrService {
+        id
+        name
+        description
+        unitPrice
+      }
+    }
+  }
+}

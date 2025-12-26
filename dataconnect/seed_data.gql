@@ -1,0 +1,84 @@
+mutation CreateDemoData @transaction @auth(level: PUBLIC, insecureReason: "This operation is used to seed the database with demo data and is safe to expose to the public") {
+  user_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      displayName: "demouser1",
+      email: "demouser1@example.com",
+      createdAt: "2024-01-01T00:00:00Z"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440001",
+      displayName: "demouser2",
+      email: "demouser2@example.com",
+      createdAt: "2024-01-01T00:00:00Z"
+    }
+  ])
+  client_insertMany(data: [
+    {
+      id: "650e8400-e29b-41d4-a716-446655440002",
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      name: "democlient1",
+      email: "democlient1@example.com"
+    },
+    {
+      id: "650e8400-e29b-41d4-a716-446655440003",
+      userId: "550e8400-e29b-41d4-a716-446655440001",
+      name: "democlient2",
+      email: "democlient2@example.com"
+    }
+  ])
+  productOrService_insertMany(data: [
+    {
+      id: "750e8400-e29b-41d4-a716-446655440004",
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      name: "demoservice1",
+      unitPrice: 100.0
+    },
+    {
+      id: "750e8400-e29b-41d4-a716-446655440005",
+      userId: "550e8400-e29b-41d4-a716-446655440001",
+      name: "demoproduct1",
+      unitPrice: 50.0
+    }
+  ])
+  invoice_insertMany(data: [
+    {
+      id: "850e8400-e29b-41d4-a716-446655440006",
+      clientId: "650e8400-e29b-41d4-a716-446655440002",
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      createdAt: "2024-01-05T00:00:00Z",
+      dueDate: "2024-02-01",
+      invoiceNumber: "123",
+      issueDate: "2024-01-05",
+      status: "DRAFT",
+      totalAmount: 100.0
+    },
+    {
+      id: "850e8400-e29b-41d4-a716-446655440007",
+      clientId: "650e8400-e29b-41d4-a716-446655440003",
+      userId: "550e8400-e29b-41d4-a716-446655440001",
+      createdAt: "2024-01-10T00:00:00Z",
+      dueDate: "2024-02-10",
+      invoiceNumber: "456",
+      issueDate: "2024-01-10",
+      status: "DRAFT",
+      totalAmount: 50.0
+    }
+  ])
+  invoiceItem_insertMany(data: [
+    {
+      invoiceId: "850e8400-e29b-41d4-a716-446655440006",
+      productOrServiceId: "750e8400-e29b-41d4-a716-446655440004",
+      quantity: 1,
+      unitPrice: 100.0,
+      lineTotal: 100.0
+    },
+    {
+      invoiceId: "850e8400-e29b-41d4-a716-446655440007",
+      productOrServiceId: "750e8400-e29b-41d4-a716-446655440005",
+      quantity: 1,
+      unitPrice: 50.0,
+      lineTotal: 50.0
+    }
+  ])
+}

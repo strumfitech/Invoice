@@ -1,2 +1,5 @@
 /node_modules
 firebase-service-account-key.json
+.firebase/
+functions/node_modules/
+.env
