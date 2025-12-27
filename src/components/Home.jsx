@@ -13,6 +13,7 @@ export default function Home(){
         <div className="d-flex gap-2 justify-content-center flex-wrap">
           <Link to="/companies" className="btn btn-secondary home-btn">Configurare Societate</Link>
           <Link to="/clients" className="btn btn-secondary home-btn">Adauga Client</Link>
+          <Link to="/analytics" className="btn btn-secondary home-btn">Analytics</Link>
           <Link to="/reminders" className="btn btn-secondary home-btn">Mementouri</Link>
         </div>
       </div>

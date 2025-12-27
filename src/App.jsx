@@ -8,6 +8,7 @@ import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
 import CompanyConfig from './components/CompanyConfig.jsx';
 import ClientConfig from './components/ClientConfig.jsx';
+import Analytics from './components/Analytics.jsx';
 import Reminders from './components/Reminders.jsx';
 import NewInvoicePage from './pages/NewInvoicePage.jsx';
 import HistoryPage from './pages/HistoryPage.jsx';
@@ -32,6 +33,7 @@ function AppContent() {
         <Route path="/register" element={<Register />} />
         <Route path="/companies" element={<ProtectedRoute><CompanyConfig /></ProtectedRoute>} />
         <Route path="/clients" element={<ProtectedRoute><ClientConfig /></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
         <Route path="/reminders" element={<ProtectedRoute><Reminders /></ProtectedRoute>} />
         <Route path="/new" element={<ProtectedRoute><NewInvoicePage /></ProtectedRoute>} />
         <Route path="/invoices" element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
