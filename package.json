@@ -1,6 +1,7 @@
 {
   "name": "invoice-spa-react-js",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "start": "vite",
@@ -20,6 +21,7 @@
     "react-router-dom": "^6.19.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
     "vite": "^5.4.0"
   }
 }
