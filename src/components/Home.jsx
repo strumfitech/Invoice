@@ -57,65 +57,79 @@ export default function Home(){
             </p>
           </div>
 
-          {/* Quick Actions */}
+          {/* All Actions - 6 Cards in 2x3 Grid */}
           <div className="row g-4 mb-5">
-            <div className="col-md-4">
+            {/* Row 1 */}
+            <div className="col-lg-4 col-md-4 col-4">
               <Link to="/new" className="dashboard-card text-decoration-none">
                 <div className="dashboard-card-icon">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
                 </div>
                 <h3 className="h5 fw-semibold mb-2">Factură Nouă</h3>
-                <p className="text-muted small">Creați o factură nouă în câteva minute</p>
+                <p className="text-muted small">Creați facturi rapide</p>
               </Link>
             </div>
 
-            <div className="col-md-4">
-              <Link to="/companies" className="dashboard-card text-decoration-none">
-                <div className="dashboard-card-icon">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <h3 className="h5 fw-semibold mb-2">Companie</h3>
-                <p className="text-muted small">Configurați datele companiei</p>
-              </Link>
-            </div>
-
-            <div className="col-md-4">
+            <div className="col-lg-4 col-md-4 col-4">
               <Link to="/clients" className="dashboard-card text-decoration-none">
                 <div className="dashboard-card-icon">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                 </div>
                 <h3 className="h5 fw-semibold mb-2">Clienți</h3>
-                <p className="text-muted small">Gestionați baza de date cu clienți</p>
+                <p className="text-muted small">Gestionați clienții</p>
               </Link>
             </div>
-          </div>
 
-          {/* Secondary Actions */}
-          <div className="text-center mb-5">
-            <div className="d-flex flex-wrap justify-content-center gap-3">
-              <Link to="/templates" className="btn btn-outline-primary">
-                <svg className="me-2" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Template-uri
+            <div className="col-lg-4 col-md-4 col-4">
+              <Link to="/companies" className="dashboard-card text-decoration-none">
+                <div className="dashboard-card-icon">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <h3 className="h5 fw-semibold mb-2">Societate</h3>
+                <p className="text-muted small">Configurați compania</p>
               </Link>
-              <Link to="/analytics" className="btn btn-outline-primary">
-                <svg className="me-2" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-                Analytics
+            </div>
+
+            {/* Row 2 */}
+            <div className="col-lg-4 col-md-4 col-4">
+              <Link to="/templates" className="dashboard-card text-decoration-none">
+                <div className="dashboard-card-icon">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h3 className="h5 fw-semibold mb-2">Template-uri</h3>
+                <p className="text-muted small">Personalizați design-ul</p>
               </Link>
-              <Link to="/reminders" className="btn btn-outline-primary">
-                <svg className="me-2" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Mementouri
+            </div>
+
+            <div className="col-lg-4 col-md-4 col-4">
+              <Link to="/analytics" className="dashboard-card text-decoration-none">
+                <div className="dashboard-card-icon">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <h3 className="h5 fw-semibold mb-2">Analytics</h3>
+                <p className="text-muted small">Vizualizați statisticile</p>
+              </Link>
+            </div>
+
+            <div className="col-lg-4 col-md-4 col-4">
+              <Link to="/reminders" className="dashboard-card text-decoration-none">
+                <div className="dashboard-card-icon">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="h5 fw-semibold mb-2">Mementouri</h3>
+                <p className="text-muted small">Gestionați termenele</p>
               </Link>
             </div>
           </div>
