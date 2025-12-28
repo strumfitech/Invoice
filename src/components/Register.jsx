@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import PasswordInput from './PasswordInput.jsx';
 
 export default function Register() {
   const [email, setEmail] = useState('');
@@ -41,17 +42,28 @@ export default function Register() {
             </div>
             <div className="mb-3">
               <label className="form-label">Parolă</label>
-              <input
-                type="password"
-                className="form-control"
+              <PasswordInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="Introdu parola"
                 required
               />
             </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <button type="submit" className="btn btn-primary w-100">Înregistrează-te</button>
           </form>
+
+          <div className="card mt-4">
+            <div className="card-body">
+              <h6 className="card-title">Cerinte Parolă</h6>
+              <ul className="list-unstyled small text-muted mb-0">
+                <li>• Parola trebuie să aibă cel puțin 6 caractere</li>
+                <li>• Folosește o combinație de litere, cifre și simboluri</li>
+                <li>• Nu utiliza parole ușor de ghicit</li>
+                <li>• Parolele sunt stocate în siguranță și criptate</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>

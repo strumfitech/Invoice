@@ -9,7 +9,7 @@ export default function Landing() {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-6">
-              <h1 className="display-4 fw-bold mb-4">Factura SPA</h1>
+              <h1 className="display-4 fw-bold mb-4" style={{ color: 'white' }}>iFactura</h1>
               <p className="lead fs-5 mb-4">
                 Aplicația modernă pentru gestionarea facturilor. Simplu, rapid și complet offline.
               </p>
@@ -88,7 +88,7 @@ export default function Landing() {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-6">
-              <h2 className="fw-bold mb-4">De ce Factura SPA?</h2>
+              <h2 className="fw-bold mb-4">De ce iFactura?</h2>
               <div className="mb-3">
                 <h5 className="text-primary">💼 Gestionare Completă</h5>
                 <p>Adăugă produse nelimitate, calculează TVA automat, gestionează clienți și exportă în PDF sau previzualizează online.</p>
@@ -114,7 +114,7 @@ export default function Landing() {
         <div className="container text-center">
           <h2 className="fw-bold mb-3">Gata să Digitalizezi Facturarea?</h2>
           <p className="lead mb-4 text-muted">
-            Alătură-te mii de afaceri care economisesc timp și bani cu Factura SPA.
+            Alătură-te mii de afaceri care economisesc timp și bani cu iFactura.
           </p>
           <Link to="/register" className="btn btn-lg px-5 py-3 fw-bold" style={{ backgroundColor: '#6E5B78', color: 'white' }}>
             Începe Acum - Gratuit

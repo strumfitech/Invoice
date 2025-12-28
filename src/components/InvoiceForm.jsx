@@ -145,9 +145,22 @@ export default function InvoiceForm({ onSubmit }){
   };
 
   return (
-    <form onSubmit={submit}>
-      <div className="mb-4">
-        <h4>Selectează Companie</h4>
+    <div className="container-fluid py-4">
+      <form onSubmit={submit}>
+        {/* Validation Errors */}
+        {validationErrors.length > 0 && (
+          <div className="alert alert-danger mb-4">
+            <h6>Erori de validare:</h6>
+            <ul className="mb-0">
+              {validationErrors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="mb-4">
+          <h4>Selectează Companie</h4>
         <select className="form-select" value={selectedCompany} onChange={e => setSelectedCompany(e.target.value)}>
           <option value="">Alege o companie...</option>
           {companies.map((comp, idx) => (
@@ -414,7 +427,7 @@ export default function InvoiceForm({ onSubmit }){
       </div>
       {deleteLineIndex !== null && <div className="modal-backdrop fade show"></div>}
 
-
-    </form>
+      </form>
+    </div>
   );
 }

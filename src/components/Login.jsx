@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from './AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import PasswordInput from './PasswordInput.jsx';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -41,11 +42,10 @@ export default function Login() {
             </div>
             <div className="mb-3">
               <label className="form-label">Parolă</label>
-              <input
-                type="password"
-                className="form-control"
+              <PasswordInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="Introdu parola"
                 required
               />
             </div>
