@@ -193,6 +193,13 @@ h6 { font-size: 1rem; }
   align-items: center;
 }
 
+/* Increase height on desktop for better icon visibility */
+@media (min-width: 768px) {
+  .dashboard-card {
+    height: 207px; /* 15% increase from 180px for better icon visibility */
+  }
+}
+
 .dashboard-card::before {
   content: '';
   position: absolute;

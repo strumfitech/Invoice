@@ -52,9 +52,6 @@ export default function Home(){
             <h1 className="display-4 fw-bold text-primary mb-4">
               Gestionați facturile cu ușurință
             </h1>
-            <p className="lead text-muted" style={{ maxWidth: '600px', margin: '0 auto' }}>
-              Platforma completă pentru generarea, gestionarea și urmărirea facturilor
-            </p>
           </div>
 
           {/* All Actions - 6 Cards in 2x3 Grid */}
