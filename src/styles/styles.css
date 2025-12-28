@@ -23,11 +23,41 @@ body{background:#f8f9fa;}
 
   .invoice-content .d-flex.justify-content-between {
     align-items: stretch !important;
+    position: relative;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .invoice-content .d-flex.justify-content-between::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
   }
 
   .invoice-content .d-flex.justify-content-between > div {
     text-align: left !important;
     margin-bottom: 10px !important;
+    flex: 0 0 auto;
+    min-width: 120px;
+    margin-right: 15px; /* Increased spacing by ~10% */
+  }
+
+  .invoice-content .d-flex.justify-content-between > div:last-child {
+    margin-right: 0;
+  }
+
+  /* Zoom controls for mobile */
+  .zoom-controls {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    display: flex;
+    gap: 5px;
+  }
+
+  .zoom-controls button {
+    padding: 2px 8px;
+    font-size: 12px;
+    border-radius: 3px;
   }
 
   .table-wrapper {
@@ -75,5 +105,12 @@ body{background:#f8f9fa;}
 
   select {
     max-width: 100%;
+  }
+}
+
+@media (max-width: 410px) {
+  .invoice-table th,
+  .invoice-table td {
+    padding: 2px !important; /* Reduced by 2px from 3px for very small screens */
   }
 }

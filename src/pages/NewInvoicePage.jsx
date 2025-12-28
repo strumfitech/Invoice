@@ -25,7 +25,7 @@ export default function NewInvoicePage(){
       const total = lines.reduce((a,b)=> a + b.lineTotal, 0);
       const finalInvoice = { ...prepared, lines, subtotal, totalTax, total, currency: prepared.currency || 'RON' };
       await storage.saveInvoice(finalInvoice);
-      navigate('/invoices');
+      navigate(`/invoice/${id}/preview`);
     } catch (error) {
       console.error('Error saving invoice:', error);
       alert('Eroare la salvarea facturii');

@@ -6,6 +6,64 @@ import { useAuth } from './AuthContext.jsx';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
+const getTemplateStyles = (template) => {
+  if (!template) return {};
+
+  return {
+    fontFamily: template.fonts?.body || 'Arial, sans-serif',
+    color: template.colors?.text || '#333333',
+    backgroundColor: template.colors?.secondary || '#f8f9fa',
+    '--primary-color': template.colors?.primary || '#6E5B78',
+    '--accent-color': template.colors?.accent || '#007bff'
+  };
+};
+
+const applyTemplateToInvoice = (template, invoiceElement) => {
+  if (!template || !invoiceElement) return;
+
+  // Apply font family
+  if (template.fonts?.body) {
+    invoiceElement.style.fontFamily = template.fonts.body;
+  }
+
+  // Apply colors
+  if (template.colors?.text) {
+    invoiceElement.style.color = template.colors.text;
+  }
+  if (template.colors?.secondary) {
+    invoiceElement.style.backgroundColor = template.colors.secondary;
+  }
+
+  // Apply header text
+  const headerElement = invoiceElement.querySelector('h1');
+  if (headerElement && template.headerText) {
+    headerElement.textContent = template.headerText;
+  }
+
+  // Apply logo if exists
+  if (template.showLogo && template.logo) {
+    const logoImg = document.createElement('img');
+    logoImg.src = template.logo;
+    logoImg.style.maxHeight = '50px';
+    logoImg.style.marginBottom = '10px';
+
+    const headerContainer = invoiceElement.querySelector('.d-flex.justify-content-between.mb-4');
+    if (headerContainer) {
+      headerContainer.insertBefore(logoImg, headerContainer.firstChild);
+    }
+  }
+
+  // Apply footer text
+  if (template.footerText) {
+    const footerDiv = document.createElement('div');
+    footerDiv.textContent = template.footerText;
+    footerDiv.style.marginTop = '20px';
+    footerDiv.style.fontSize = '12px';
+    footerDiv.style.textAlign = 'center';
+    invoiceElement.appendChild(footerDiv);
+  }
+};
+
 export default function InvoicePreview(){
   const { id } = useParams();
   const navigate = useNavigate();
@@ -37,6 +95,19 @@ export default function InvoicePreview(){
     }
   };
 
+  // Apply template after component mounts if invoice has one
+  React.useLayoutEffect(() => {
+    if (!loading) {
+      const currentInv = invoices.find(v => String(v.id) === String(id));
+      if (currentInv && currentInv.template) {
+        const invoiceElement = document.getElementById('invoice-content');
+        if (invoiceElement) {
+          applyTemplateToInvoice(currentInv.template, invoiceElement);
+        }
+      }
+    }
+  }, [loading, invoices, id]);
+
   if (loading) {
     return <div className="container py-5 text-center">Se încarcă...</div>;
   }
@@ -55,6 +126,22 @@ export default function InvoicePreview(){
   const company = inv.company || {};
   const recipient = inv.recipient || {};
   const lines = inv.lines || [];
+
+  // Function to format address on multiple lines
+  const formatAddress = (address) => {
+    if (!address) return '';
+
+    // Split by comma and limit to 2 lines
+    const parts = address.split(',');
+    if (parts.length <= 2) {
+      return parts.join(',\n');
+    }
+
+    // If more than 2 parts, combine first two and put rest on next line
+    const firstLine = parts.slice(0, 2).join(', ');
+    const secondLine = parts.slice(2).join(', ');
+    return `${firstLine}\n${secondLine}`;
+  };
 
   const handlePrint = () => {
     window.print();
@@ -109,7 +196,31 @@ export default function InvoicePreview(){
         </div>
       </div>
       <div id="invoice-content" className="invoice-content" style={{ backgroundColor: 'white', padding: '8mm', minHeight: '247mm', boxSizing: 'border-box', maxWidth: '210mm', margin: '0 auto', fontSize: '14px', lineHeight: '1.4' }}>
-        <div className="d-flex justify-content-between mb-4">
+        <div className="d-flex justify-content-between mb-4 position-relative">
+          {/* Zoom controls for mobile */}
+          <div className="zoom-controls d-md-none">
+            <button
+              className="btn btn-outline-secondary btn-sm"
+              onClick={() => {
+                const container = document.querySelector('.invoice-content .d-flex.justify-content-between');
+                if (container) container.scrollLeft -= 100;
+              }}
+              type="button"
+            >
+              ←
+            </button>
+            <button
+              className="btn btn-outline-secondary btn-sm"
+              onClick={() => {
+                const container = document.querySelector('.invoice-content .d-flex.justify-content-between');
+                if (container) container.scrollLeft += 100;
+              }}
+              type="button"
+            >
+              →
+            </button>
+          </div>
+
           <div>
             <h5>Companie:</h5>
             <div>{company.name || ''}</div>
@@ -126,7 +237,7 @@ export default function InvoicePreview(){
           <div style={{ textAlign: 'right' }}>
             <h5>Destinatar:</h5>
             <div>{recipient.name || ''}</div>
-            <div>{recipient.address || ''}</div>
+            <div style={{ whiteSpace: 'pre-line' }}>{formatAddress(recipient.address || '')}</div>
             <div>CUI: {recipient.cui || ''}</div>
           </div>
         </div>
