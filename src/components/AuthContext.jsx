@@ -29,20 +29,20 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      return true;
+      return { success: true };
     } catch (error) {
       console.error('Login error:', error);
-      return false;
+      return { success: false, error: error.code };
     }
   };
 
   const register = async (email, password) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      return true;
+      return { success: true };
     } catch (error) {
       console.error('Registration error:', error);
-      return false;
+      return { success: false, error: error.code };
     }
   };
 
