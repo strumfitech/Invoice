@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function Templates() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [templates, setTemplates] = useState([]);
   const [currentTemplate, setCurrentTemplate] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -108,7 +110,7 @@ export default function Templates() {
 
   const saveTemplate = () => {
     if (!currentTemplate.name.trim()) {
-      alert('Introduceți un nume pentru template');
+      alert(t('templates.name_required'));
       return;
     }
 
@@ -128,11 +130,11 @@ export default function Templates() {
 
   const deleteTemplate = (templateId) => {
     if (templateId.startsWith('default-')) {
-      alert('Nu puteți șterge template-urile implicite');
+      alert(t('templates.cannot_delete'));
       return;
     }
 
-    if (confirm('Sigur doriți să ștergeți acest template?')) {
+    if (confirm(t('templates.confirm_delete'))) {
       const updatedTemplates = templates.filter(t => t.id !== templateId);
       saveTemplates(updatedTemplates);
     }
@@ -197,22 +199,22 @@ export default function Templates() {
       <div className="container py-5">
         <div className="mb-3">
           <button className="btn btn-outline-secondary" onClick={() => { setIsEditing(false); setCurrentTemplate(null); }}>
-            ← Înapoi la Template-uri
+            ← {t('templates.back')}
           </button>
         </div>
 
-        <h2>Editor Template</h2>
+        <h2>{t('templates.editor_title')}</h2>
 
         <div className="row">
           <div className="col-md-8">
             <div className="card">
               <div className="card-header">
-                <h5>Setări Template</h5>
+                <h5>{t('templates.settings')}</h5>
               </div>
               <div className="card-body">
                 <div className="row g-3">
                   <div className="col-12">
-                    <label className="form-label">Nume Template</label>
+                    <label className="form-label">{t('templates.name')}</label>
                     <input
                       type="text"
                       className="form-control"
@@ -222,20 +224,20 @@ export default function Templates() {
                   </div>
 
                   <div className="col-md-6">
-                    <label className="form-label">Layout</label>
+                    <label className="form-label">{t('templates.layout')}</label>
                     <select
                       className="form-select"
                       value={currentTemplate.layout}
                       onChange={(e) => updateTemplateField('layout', e.target.value)}
                     >
-                      <option value="classic">Clasic</option>
-                      <option value="modern">Modern</option>
-                      <option value="minimalist">Minimalist</option>
+                      <option value="classic">{t('templates.classic')}</option>
+                      <option value="modern">{t('templates.modern')}</option>
+                      <option value="minimalist">{t('templates.minimalist')}</option>
                     </select>
                   </div>
 
                   <div className="col-md-6">
-                    <label className="form-label">Dimensiune Hârtie</label>
+                    <label className="form-label">{t('templates.paper_size')}</label>
                     <select
                       className="form-select"
                       value={currentTemplate.paperSize}
@@ -247,7 +249,7 @@ export default function Templates() {
                   </div>
 
                   <div className="col-12">
-                    <label className="form-label">Logo Companie</label>
+                    <label className="form-label">{t('templates.logo')}</label>
                     <input
                       type="file"
                       className="form-control"
@@ -269,12 +271,12 @@ export default function Templates() {
                         checked={currentTemplate.showLogo}
                         onChange={(e) => updateTemplateField('showLogo', e.target.checked)}
                       />
-                      <label className="form-check-label">Afișează logo</label>
+                      <label className="form-check-label">{t('templates.show_logo')}</label>
                     </div>
                   </div>
 
                   <div className="col-12">
-                    <label className="form-label">Text Antet</label>
+                    <label className="form-label">{t('templates.header_text')}</label>
                     <input
                       type="text"
                       className="form-control"
@@ -284,7 +286,7 @@ export default function Templates() {
                   </div>
 
                   <div className="col-12">
-                    <label className="form-label">Text Subsol</label>
+                    <label className="form-label">{t('templates.footer_text')}</label>
                     <textarea
                       className="form-control"
                       rows="3"
@@ -300,12 +302,12 @@ export default function Templates() {
           <div className="col-md-4">
             <div className="card">
               <div className="card-header">
-                <h5>Culori</h5>
+                <h5>{t('templates.colors')}</h5>
               </div>
               <div className="card-body">
                 <div className="row g-3">
                   <div className="col-6">
-                    <label className="form-label">Primary</label>
+                    <label className="form-label">{t('templates.primary')}</label>
                     <input
                       type="color"
                       className="form-control form-control-color"
@@ -314,7 +316,7 @@ export default function Templates() {
                     />
                   </div>
                   <div className="col-6">
-                    <label className="form-label">Secondary</label>
+                    <label className="form-label">{t('templates.secondary')}</label>
                     <input
                       type="color"
                       className="form-control form-control-color"
@@ -323,7 +325,7 @@ export default function Templates() {
                     />
                   </div>
                   <div className="col-6">
-                    <label className="form-label">Text</label>
+                    <label className="form-label">{t('templates.text')}</label>
                     <input
                       type="color"
                       className="form-control form-control-color"
@@ -332,7 +334,7 @@ export default function Templates() {
                     />
                   </div>
                   <div className="col-6">
-                    <label className="form-label">Accent</label>
+                    <label className="form-label">{t('templates.accent')}</label>
                     <input
                       type="color"
                       className="form-control form-control-color"
@@ -346,12 +348,12 @@ export default function Templates() {
 
             <div className="card mt-3">
               <div className="card-header">
-                <h5>Fonturi</h5>
+                <h5>{t('templates.fonts')}</h5>
               </div>
               <div className="card-body">
                 <div className="row g-3">
                   <div className="col-12">
-                    <label className="form-label">Font Antet</label>
+                    <label className="form-label">{t('templates.heading_font')}</label>
                     <select
                       className="form-select"
                       value={currentTemplate.fonts.heading}
@@ -364,7 +366,7 @@ export default function Templates() {
                     </select>
                   </div>
                   <div className="col-12">
-                    <label className="form-label">Font Corp</label>
+                    <label className="form-label">{t('templates.body_font')}</label>
                     <select
                       className="form-select"
                       value={currentTemplate.fonts.body}
@@ -377,7 +379,7 @@ export default function Templates() {
                     </select>
                   </div>
                   <div className="col-4">
-                    <label className="form-label">Antet</label>
+                    <label className="form-label">{t('templates.heading')}</label>
                     <input
                       type="text"
                       className="form-control"
@@ -386,7 +388,7 @@ export default function Templates() {
                     />
                   </div>
                   <div className="col-4">
-                    <label className="form-label">Corp</label>
+                    <label className="form-label">{t('templates.body')}</label>
                     <input
                       type="text"
                       className="form-control"
@@ -395,7 +397,7 @@ export default function Templates() {
                     />
                   </div>
                   <div className="col-4">
-                    <label className="form-label">Mic</label>
+                    <label className="form-label">{t('templates.small')}</label>
                     <input
                       type="text"
                       className="form-control"
@@ -409,7 +411,7 @@ export default function Templates() {
 
             <div className="mt-3">
               <button className="btn btn-success w-100" onClick={saveTemplate}>
-                Salvează Template
+                {t('templates.save')}
               </button>
             </div>
           </div>
@@ -422,14 +424,14 @@ export default function Templates() {
     <div className="container py-5">
       <div className="mb-3">
         <button className="btn btn-outline-secondary" onClick={() => navigate('/')}>
-          ← Înapoi la Dashboard
+          ← {t('common.back')}
         </button>
       </div>
 
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Template-uri Facturi</h2>
+        <h2>{t('templates.title')}</h2>
         <button className="btn btn-primary" onClick={createNewTemplate}>
-          + Template Nou
+          {t('templates.new')}
         </button>
       </div>
 
@@ -441,8 +443,8 @@ export default function Templates() {
                 <div className="flex-grow-1">
                   <h5 className="card-title">{template.name}</h5>
                   <p className="card-text">
-                    Layout: {template.layout}<br />
-                    Dimensiune: {template.paperSize}
+                    {t('templates.layout')}: {template.layout}<br />
+                    {t('templates.paper_size')}: {template.paperSize}
                   </p>
                   <div
                     className="border rounded p-2 mb-3"
@@ -478,7 +480,7 @@ export default function Templates() {
                         fontSize: '12px'
                       }}
                     >
-                      Preview template
+                      {t('templates.preview')}
                     </div>
                   </div>
                 </div>
@@ -489,20 +491,20 @@ export default function Templates() {
                       className="btn btn-outline-primary flex-fill"
                       onClick={() => editTemplate(template)}
                     >
-                      Editează
+                      {t('templates.edit')}
                     </button>
                     <button
                       className="btn btn-outline-secondary flex-fill"
                       onClick={() => duplicateTemplate(template)}
                     >
-                      Duplicare
+                      {t('templates.duplicate')}
                     </button>
                     {!template.id.startsWith('default-') && (
                       <button
                         className="btn btn-outline-danger"
                         onClick={() => deleteTemplate(template.id)}
                       >
-                        Șterge
+                        {t('templates.delete')}
                       </button>
                     )}
                   </div>

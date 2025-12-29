@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import storage from '../services/storage.js';
 import { Link } from 'react-router-dom';
 import { useAuth } from './AuthContext.jsx';
+import { useTranslation } from 'react-i18next';
 
 export default function InvoiceList(){
   const [invoices, setInvoices] = useState([]);
@@ -9,6 +10,7 @@ export default function InvoiceList(){
   const [deleteModal, setDeleteModal] = useState(false);
   const [invoiceToDelete, setInvoiceToDelete] = useState(null);
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   useEffect(()=>{
     if (user) {
@@ -29,7 +31,7 @@ export default function InvoiceList(){
       setInvoiceToDelete(null);
     } catch (error) {
       console.error('Error deleting invoice:', error);
-      alert('Eroare la ștergerea facturii');
+      alert(t('common.error_deleting_invoice'));
     }
   };
 
@@ -72,15 +74,15 @@ export default function InvoiceList(){
 
   return (
     <div className="container py-5">
-      <h2>Istoric facturi</h2>
+      <h2>{t('invoice_list.title')}</h2>
       <div className="mb-3">
-        <input className="form-control" placeholder="Cauta factura..." value={query} onChange={e=>setQuery(e.target.value)} />
+        <input className="form-control" placeholder={t('invoice_list.search')} value={query} onChange={e=>setQuery(e.target.value)} />
       </div>
       <div className="mb-3">
-        <button className="btn btn-outline-secondary" onClick={exportInvoices}>Exporta facturi JSON</button>
+        <button className="btn btn-outline-secondary" onClick={exportInvoices}>{t('invoice_list.export')}</button>
       </div>
       {filtered.length === 0 ? (
-        <p>Nicio factura salvata.</p>
+        <p>{t('invoice_list.no_invoices')}</p>
       ) : (
         <div className="row">
           {filtered.map(inv => (
@@ -88,17 +90,17 @@ export default function InvoiceList(){
               <div className="card h-100">
                 <div className="card-body d-flex flex-column">
                   <div className="flex-grow-1">
-                    <h5 className="card-title">Factura {inv.id}</h5>
+                    <h5 className="card-title">{t('common.invoice')} {inv.id}</h5>
                     <p className="card-text">
-                      Data: {new Date(inv.date).toLocaleString()}<br />
-                      Total: {Number(inv.total).toFixed(2)} {inv.currency}
+                      {t('common.date')}: {new Date(inv.date).toLocaleString()}<br />
+                      {t('common.total')}: {Number(inv.total).toFixed(2)} {inv.currency}
                     </p>
                   </div>
                   <div className="mt-auto">
                     <div className="d-flex gap-2 justify-content-center">
-                      <Link to={`/invoice/${inv.id}/preview`} className="btn btn-primary">Preview</Link>
-                      <button className="btn btn-success" onClick={()=>exportSingleInvoice(inv)}>Export JSON</button>
-                      <button className="btn btn-danger" onClick={() => { setInvoiceToDelete(inv); setDeleteModal(true); }}>Sterge</button>
+                      <Link to={`/invoice/${inv.id}/preview`} className="btn btn-primary">{t('invoice_list.preview')}</Link>
+                      <button className="btn btn-success" onClick={()=>exportSingleInvoice(inv)}>{t('invoice_list.export_single')}</button>
+                      <button className="btn btn-danger" onClick={() => { setInvoiceToDelete(inv); setDeleteModal(true); }}>{t('invoice_list.delete')}</button>
                     </div>
                   </div>
                 </div>
@@ -113,15 +115,15 @@ export default function InvoiceList(){
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Confirmare Ștergere</h5>
+              <h5 className="modal-title">{t('invoice_list.confirm_delete')}</h5>
               <button type="button" className="btn-close" onClick={() => setDeleteModal(false)}></button>
             </div>
             <div className="modal-body">
-              <p>Ești sigur că vrei să ștergi factura {invoiceToDelete?.id}?</p>
+              <p>{t('invoice_list.delete_confirmation')} {invoiceToDelete?.id}?</p>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary px-4 py-2" onClick={() => setDeleteModal(false)}>Nu</button>
-              <button type="button" className="btn btn-danger px-4 py-2" onClick={confirmDelete}>Da</button>
+              <button type="button" className="btn btn-secondary px-4 py-2" onClick={() => setDeleteModal(false)}>{t('common.no')}</button>
+              <button type="button" className="btn btn-danger px-4 py-2" onClick={confirmDelete}>{t('common.yes')}</button>
             </div>
           </div>
         </div>

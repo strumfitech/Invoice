@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import storage from '../services/storage.js';
 import { useAuth } from './AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const API_URL = '/api/getFirmaByCUI';
 
@@ -15,6 +16,7 @@ export default function ClientConfig() {
   const [clientToDelete, setClientToDelete] = useState(null);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (user) loadClients();
@@ -36,7 +38,7 @@ const fetchCompanyData = async () => {
   const cleanCUI = normalizeCUI(form.cui);
 
   if (!cleanCUI || isNaN(cleanCUI)) {
-    alert('Introduceți un CUI valid');
+    alert(t('client.cui_error'));
     return;
   }
 
@@ -58,7 +60,7 @@ const fetchCompanyData = async () => {
     const result = await response.json();
 
     if (!result.data) {
-      alert('Nu s-au găsit date pentru acest CUI');
+      alert(t('client.no_data_found'));
       return;
     }
 
@@ -83,7 +85,7 @@ const fetchCompanyData = async () => {
     }));
   } catch (err) {
     console.error('INFOCUI error:', err);
-    alert('Eroare la preluarea datelor firmei');
+    alert(t('client.fetch_error'));
   } finally {
     setLoading(false);
   }
@@ -111,7 +113,7 @@ const fetchCompanyData = async () => {
       setShowDetails(false);
     } catch (error) {
       console.error(error);
-      alert('Eroare la salvare');
+      alert(t('client.save_error'));
     }
   };
 
@@ -137,21 +139,21 @@ const fetchCompanyData = async () => {
   return (
     <div className="container py-5">
       <button className="btn btn-outline-secondary mb-3" onClick={() => navigate('/')}>
-        ← Înapoi
+        ← {t('common.back')}
       </button>
 
-      <h2>Adaugă Client</h2>
+      <h2>{t('client.add_client')}</h2>
 
       <form onSubmit={handleSubmit}>
         <div className="row g-3 mb-3">
           <div className="col-md-6">
-            <label>CUI</label>
+            <label>{t('client.cui')}</label>
             <div className="input-group">
               <input
                 className="form-control"
                 value={form.cui}
                 onChange={(e) => setForm({ ...form, cui: e.target.value })}
-                placeholder="Introduceți CUI-ul"
+                placeholder={t('client.cui')}
               />
               <button
                 type="button"
@@ -162,7 +164,7 @@ const fetchCompanyData = async () => {
                 }}
                 disabled={loading}
               >
-                {loading ? 'Se caută...' : 'Preia date'}
+                {loading ? t('client.searching') : t('client.fetch_data')}
               </button>
             </div>
           </div>
@@ -171,7 +173,7 @@ const fetchCompanyData = async () => {
         {showDetails && (
           <div className="row g-3">
             <div className="col-md-6">
-              <label>Nume Client</label>
+              <label>{t('client.name')}</label>
               <input
                 className="form-control"
                 value={form.name}
@@ -181,7 +183,7 @@ const fetchCompanyData = async () => {
             </div>
 
             <div className="col-md-6">
-              <label>Adresă</label>
+              <label>{t('client.address')}</label>
               <input
                 className="form-control"
                 value={form.address}
@@ -193,7 +195,7 @@ const fetchCompanyData = async () => {
 
 
             <div className="col-md-6">
-              <label>Număr Telefon</label>
+              <label>{t('client.phone')}</label>
               <input
                 type="tel"
                 className="form-control"
@@ -203,7 +205,7 @@ const fetchCompanyData = async () => {
             </div>
 
             <div className="col-md-6">
-              <label>Cod Înmatriculare</label>
+              <label>{t('client.registration_code')}</label>
               <input
                 className="form-control"
                 value={form.registrationCode}
@@ -215,14 +217,14 @@ const fetchCompanyData = async () => {
 
         {showDetails && (
           <button className="btn btn-primary mt-3" disabled={loading}>
-            {editing !== null ? 'Actualizează' : 'Adaugă'}
+            {editing !== null ? t('client.update') : t('client.add')}
           </button>
         )}
       </form>
 
-      <h3 className="mt-5">Clienți Salvați</h3>
+      <h3 className="mt-5">{t('client.saved_clients')}</h3>
       {clients.length === 0 ? (
-        <p>Niciun client adăugat.</p>
+        <p>{t('client.no_clients')}</p>
       ) : (
         <div className="row">
           {clients.map((client, index) => (
@@ -231,14 +233,14 @@ const fetchCompanyData = async () => {
                 <div className="card-body">
                   <h5 className="card-title">{client.name}</h5>
                   <p className="card-text">
-                    CUI: {client.cui}<br />
-                    Adresă: {client.address}<br />
-                    {client.phone && `Telefon: ${client.phone}`}<br />
-                    {client.registrationCode && `Cod Înmatriculare: ${client.registrationCode}`}
+                    {t('client.cui')}: {client.cui}<br />
+                    {t('client.address')}: {client.address}<br />
+                    {client.phone && `${t('client.phone')}: ${client.phone}`}<br />
+                    {client.registrationCode && `${t('client.registration_code')}: ${client.registrationCode}`}
                   </p>
                   <div className="d-flex gap-2">
-                    <button className="btn btn-outline-primary" onClick={() => editClient(index)}>Editează</button>
-                    <button className="btn btn-outline-danger" onClick={() => { setClientToDelete(clients[index]); setDeleteModal(true); }}>Șterge</button>
+                    <button className="btn btn-outline-primary" onClick={() => editClient(index)}>{t('client.edit')}</button>
+                    <button className="btn btn-outline-danger" onClick={() => { setClientToDelete(clients[index]); setDeleteModal(true); }}>{t('client.delete')}</button>
                   </div>
                 </div>
               </div>
@@ -252,15 +254,15 @@ const fetchCompanyData = async () => {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Confirmare Ștergere</h5>
+              <h5 className="modal-title">{t('client.delete')}</h5>
               <button type="button" className="btn-close" onClick={() => setDeleteModal(false)}></button>
             </div>
             <div className="modal-body">
-              <p>Ești sigur că vrei să ștergi clientul {clientToDelete?.name}?</p>
+              <p>{t('client.delete_confirmation')} {clientToDelete?.name}?</p>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary px-4 py-2" onClick={() => setDeleteModal(false)}>Nu</button>
-              <button type="button" className="btn btn-danger px-4 py-2" onClick={confirmDelete}>Da</button>
+              <button type="button" className="btn btn-secondary px-4 py-2" onClick={() => setDeleteModal(false)}>{t('common.no')}</button>
+              <button type="button" className="btn btn-danger px-4 py-2" onClick={confirmDelete}>{t('common.yes')}</button>
             </div>
           </div>
         </div>

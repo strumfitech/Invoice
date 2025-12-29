@@ -24,6 +24,27 @@
   --transition: all 0.2s ease-in-out;
 }
 
+/* Dark mode variables */
+:root[data-bs-theme="dark"] {
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --secondary-color: #94a3b8;
+  --accent-color: #22d3ee;
+  --success-color: #34d399;
+  --warning-color: #fbbf24;
+  --error-color: #f87171;
+  --background-color: #0f172a;
+  --surface-color: #1e293b;
+  --surface-hover: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+}
+
 /* Global Styles */
 * {
   box-sizing: border-box;
@@ -31,11 +52,41 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, var(--background-color) 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, var(--background-color) 0%, var(--surface-color) 100%);
   color: var(--text-primary);
   line-height: 1.6;
   margin: 0;
   min-height: 100vh;
+}
+
+/* Dark mode body background */
+:root[data-bs-theme="dark"] body {
+  background: #161F32 !important;
+}
+
+/* Dropdown submenu styles */
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+  display: none;
+}
+
+.dropdown-submenu:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-submenu .dropdown-item {
+  cursor: pointer;
+}
+
+/* Dark mode hero section */
+:root[data-bs-theme="dark"] .hero-section {
+  background: #161F32 !important;
 }
 
 /* Typography */
@@ -123,7 +174,7 @@ h6 { font-size: 1rem; }
 }
 
 .card-header {
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  background: linear-gradient(135deg, var(--surface-color), var(--surface-hover));
   border-bottom: 1px solid var(--border-color);
   padding: 1.5rem;
   font-weight: 600;
@@ -164,6 +215,40 @@ h6 { font-size: 1rem; }
   backdrop-filter: blur(10px);
 }
 
+/* Dark mode navbar */
+:root[data-bs-theme="dark"] .navbar {
+  background: #161F32 !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+:root[data-bs-theme="dark"] .navbar .navbar-brand {
+  background: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+:root[data-bs-theme="dark"] .navbar .nav-link {
+  color: #ffffff !important;
+}
+
+:root[data-bs-theme="dark"] .navbar .nav-link:hover {
+  color: #cccccc !important;
+}
+
+:root[data-bs-theme="dark"] .navbar .dropdown-menu {
+  background: #000000 !important;
+  border: 1px solid #333333;
+}
+
+:root[data-bs-theme="dark"] .navbar .dropdown-item {
+  color: #ffffff !important;
+}
+
+:root[data-bs-theme="dark"] .navbar .dropdown-item:hover {
+  background: #333333 !important;
+  color: #ffffff !important;
+}
+
 .navbar-brand {
   font-weight: 700;
   font-size: 1.5rem;
@@ -191,6 +276,17 @@ h6 { font-size: 1rem; }
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+/* Dark mode dashboard cards */
+:root[data-bs-theme="dark"] .dashboard-card {
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  color: #1e293b !important;
+}
+
+:root[data-bs-theme="dark"] .dashboard-card h3,
+:root[data-bs-theme="dark"] .dashboard-card p {
+  color: #1e293b !important;
 }
 
 /* Increase height on desktop for better icon visibility */
@@ -316,7 +412,7 @@ h6 { font-size: 1rem; }
 }
 
 .table thead th {
-  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  background: linear-gradient(135deg, var(--surface-color), var(--surface-hover));
   border-bottom: 2px solid var(--border-color);
   font-weight: 600;
   color: var(--text-primary);

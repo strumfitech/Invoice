@@ -3,10 +3,12 @@ import InvoiceForm from '../components/InvoiceForm.jsx';
 import storage from '../services/storage.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext.jsx';
+import { useTranslation } from 'react-i18next';
 
 export default function NewInvoicePage(){
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const handleSubmit = async (invoice) => {
     try {
@@ -28,7 +30,7 @@ export default function NewInvoicePage(){
       navigate(`/invoice/${id}/preview`);
     } catch (error) {
       console.error('Error saving invoice:', error);
-      alert('Eroare la salvarea facturii');
+      alert(t('invoice.save_error'));
     }
   };
 
@@ -36,10 +38,10 @@ export default function NewInvoicePage(){
     <div className="container my-4">
       <div className="mb-3">
         <button className="btn btn-outline-secondary" onClick={() => navigate('/')}>
-          ← Înapoi la Dashboard
+          ← {t('common.back')}
         </button>
       </div>
-      <h2 className="text-center mb-5">Creează Factură</h2>
+      <h2 className="text-center mb-5">{t('invoice.create_title')}</h2>
       <InvoiceForm onSubmit={handleSubmit} />
     </div>
   );

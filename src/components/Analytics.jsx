@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import storage from '../services/storage.js';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
@@ -20,6 +21,7 @@ ChartJS.register(
 export default function Analytics() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dateFilter, setDateFilter] = useState('year'); // 'month', 'quarter', 'year'
@@ -151,28 +153,28 @@ export default function Analytics() {
   };
 
   if (loading) {
-    return <div className="container py-5 text-center">Se încarcă datele...</div>;
+    return <div className="container py-5 text-center">{t('common.loading')}</div>;
   }
 
   return (
     <div className="container py-5">
       <div className="mb-3">
         <button className="btn btn-outline-secondary" onClick={() => navigate('/')}>
-          ← Înapoi la Dashboard
+          ← {t('analytics.back')}
         </button>
       </div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Analytics Dashboard</h2>
+        <h2>{t('analytics.title')}</h2>
         <div className="d-flex gap-2">
           <select
             className="form-select"
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
           >
-            <option value="month">Ultima lună</option>
-            <option value="quarter">Ultimele 3 luni</option>
-            <option value="year">Ultimul an</option>
-            <option value="all">Toate datele</option>
+            <option value="month">{t('analytics.month')}</option>
+            <option value="quarter">{t('analytics.quarter')}</option>
+            <option value="year">{t('analytics.year')}</option>
+            <option value="all">{t('analytics.all')}</option>
           </select>
         </div>
       </div>
@@ -182,7 +184,7 @@ export default function Analytics() {
         <div className="col-md-4">
           <div className="card text-center">
             <div className="card-body">
-              <h5 className="card-title">Venituri Totale</h5>
+              <h5 className="card-title">{t('analytics.revenue')}</h5>
               <h3 className="text-success">{Number(totalRevenue).toFixed(2)} RON</h3>
             </div>
           </div>
@@ -190,7 +192,7 @@ export default function Analytics() {
         <div className="col-md-4">
           <div className="card text-center">
             <div className="card-body">
-              <h5 className="card-title">TVA Total</h5>
+              <h5 className="card-title">{t('analytics.vat')}</h5>
               <h3 className="text-warning">{Number(totalTax).toFixed(2)} RON</h3>
             </div>
           </div>
@@ -198,7 +200,7 @@ export default function Analytics() {
         <div className="col-md-4">
           <div className="card text-center">
             <div className="card-body">
-              <h5 className="card-title">Număr Facturi</h5>
+              <h5 className="card-title">{t('analytics.count')}</h5>
               <h3 className="text-info">{invoiceCount}</h3>
             </div>
           </div>
@@ -210,7 +212,7 @@ export default function Analytics() {
         <div className="col-md-8 mb-4">
           <div className="card">
             <div className="card-header">
-              <h5>Evoluția Veniturilor Lunare</h5>
+              <h5>{t('analytics.monthly_revenue')}</h5>
             </div>
             <div className="card-body">
               <Bar data={getMonthlyRevenueData()} options={{
@@ -227,7 +229,7 @@ export default function Analytics() {
         <div className="col-md-4 mb-4">
           <div className="card">
             <div className="card-header">
-              <h5>Top Clienți</h5>
+              <h5>{t('analytics.top_clients')}</h5>
             </div>
             <div className="card-body">
               <Doughnut data={getTopClientsData()} options={{
@@ -243,7 +245,7 @@ export default function Analytics() {
         <div className="col-12 mb-4">
           <div className="card">
             <div className="card-header">
-              <h5>Evoluția TVA</h5>
+              <h5>{t('analytics.vat_evolution')}</h5>
             </div>
             <div className="card-body">
               <Line data={getVATEvolutionData()} options={{
