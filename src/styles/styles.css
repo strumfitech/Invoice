@@ -89,6 +89,132 @@ body {
   background: #161F32 !important;
 }
 
+/* Dark mode landing page */
+:root[data-bs-theme="dark"] .landing-page {
+  background-color: #0f172a !important;
+}
+
+:root[data-bs-theme="dark"] .landing-page .hero-section {
+  background-color: #1e293b !important;
+}
+
+:root[data-bs-theme="dark"] .landing-page .hero-section h1,
+:root[data-bs-theme="dark"] .landing-page .hero-section p {
+  color: #ffffff !important;
+}
+
+:root[data-bs-theme="dark"] .landing-page .hero-section .btn {
+  color: #1e293b !important;
+}
+
+:root[data-bs-theme="dark"] .landing-page .benefits-section {
+  background-color: #1e293b !important;
+}
+
+:root[data-bs-theme="dark"] .landing-page .benefits-section h2,
+:root[data-bs-theme="dark"] .landing-page .benefits-section h5,
+:root[data-bs-theme="dark"] .landing-page .benefits-section p {
+  color: #000000 !important; /* Make benefits section text black in dark mode */
+}
+:root[data-bs-theme="dark"] .landing-page .cta-section h2,
+:root[data-bs-theme="dark"] .landing-page .cta-section p {
+  color: #ffffff !important;
+}
+:root[data-bs-theme="dark"] .landing-page .cta-section h2,
+:root[data-bs-theme="dark"] .landing-page .cta-section p {
+  color: #000000 !important; /* Make CTA section text black in dark mode */
+}
+
+:root[data-bs-theme="dark"] .landing-page .cta-section .btn {
+  background-color: #4f46e5 !important;
+  color: #ffffff !important;
+}
+:root[data-bs-theme="dark"] .landing-page .cta-section .btn {
+  background-color: #4f46e5 !important;
+  color: #ffffff !important;
+}
+
+/* Make features section text black in dark mode */
+:root[data-bs-theme="dark"] .landing-page .features-section h2,
+:root[data-bs-theme="dark"] .landing-page .features-section p {
+  color: #000000 !important;
+}
+
+:root[data-bs-theme="dark"] .landing-page .benefits-section {
+  background-color: #1e293b !important;
+}
+:root[data-bs-theme="dark"] .landing-page .benefits-section {
+  background-color: #1e293b !important;
+}
+
+:root[data-bs-theme="dark"] .landing-page .features-section {
+  background-color: #ffffff !important; /* Keep features section white in dark mode for black text contrast */
+}
+
+:root[data-bs-theme="dark"] .landing-page .cta-section h2,
+:root[data-bs-theme="dark"] .landing-page .cta-section p {
+  color: #000000 !important; /* Make CTA section text black in dark mode */
+}
+:root[data-bs-theme="dark"] .landing-page .cta-section {
+  background-color: #ffffff !important; /* Keep CTA section white in dark mode for black text contrast */
+}
+
+:root[data-bs-theme="dark"] .landing-page .cta-section h2,
+:root[data-bs-theme="dark"] .landing-page .cta-section p {
+  color: #000000 !important; /* Make CTA section text black in dark mode */
+}
+
+/* Make features section text black in dark mode */
+:root[data-bs-theme="dark"] .landing-page .features-section h2,
+:root[data-bs-theme="dark"] .landing-page .features-section p {
+  color: #000000 !important;
+}
+
+:root[data-bs-theme="dark"] .landing-page .features-section {
+  background-color: #ffffff !important; /* Keep features section white in dark mode for black text contrast */
+}
+
+/* Make benefits section text black in dark mode */
+:root[data-bs-theme="dark"] .landing-page .benefits-section h2,
+:root[data-bs-theme="dark"] .landing-page .benefits-section h5,
+:root[data-bs-theme="dark"] .landing-page .benefits-section p {
+  color: #000000 !important; /* Make benefits section text black in dark mode */
+}
+
+/* Make CTA section text black in dark mode */
+:root[data-bs-theme="dark"] .landing-page .cta-section {
+  background-color: #ffffff !important; /* Keep CTA section white in dark mode for black text contrast */
+}
+
+:root[data-bs-theme="dark"] .landing-page .cta-section h2,
+:root[data-bs-theme="dark"] .landing-page .cta-section p {
+  color: #000000 !important; /* Make CTA section text black in dark mode */
+}
+
+:root[data-bs-theme="dark"] .landing-page .benefits-section .text-primary {
+  color: #60a5fa !important; /* Make primary text more visible in dark mode */
+}
+
+:root[data-bs-theme="dark"] .landing-page .cta-section h2,
+:root[data-bs-theme="dark"] .landing-page .cta-section p {
+  color: #ffffff !important;
+}
+
+:root[data-bs-theme="dark"] .landing-page .cta-section .btn {
+  background-color: #4f46e5 !important;
+  color: #ffffff !important;
+}
+:root[data-bs-theme="dark"] .landing-page .benefits-section .text-primary {
+  color: #60a5fa !important; /* Make primary text more visible in dark mode */
+}
+:root[data-bs-theme="dark"] .landing-page .benefits-section .text-primary {
+  color: #60a5fa !important; /* Make primary text more visible in dark mode */
+}
+
+:root[data-bs-theme="dark"] .landing-page .benefits-section [style*="color: #6E5B78"] {
+  color: #a78bfa !important; /* Make the emoji more visible in dark mode */
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
@@ -169,27 +295,7 @@ h6 { font-size: 1rem; }
   border-color: var(--secondary-color);
   color: white;
 }
-+++++++
 
-Assistant: Perfect! I've added CSS styles for `.btn-outline-secondary` to give it a background color that matches the hover color of `.btn-secondary`. The back buttons will now have:
-
-- A default background of `var(--surface-hover)` (which is the same as the hover background of `.btn-secondary`)
-- A border color of `var(--secondary-color)`
-- Text color of `var(--text-primary)`
-
-And on hover:
-- Background changes to `var(--secondary-color)`
-- Border color stays the same
-- Text color changes to white
-
-This should make all the back buttons have a consistent background color that matches what the user wanted.<attempt_completion>
-<result>Perfect! I've added background colors to all the back buttons that use the `btn-outline-secondary` class. Here's what I implemented:
-
-## Changes Made:
-
-### **Added CSS for `.btn-outline-secondary`** (`src/styles/styles.css`)
-
-```css
 .btn-outline-secondary {
   background: var(--surface-hover);
   border-color: var(--secondary-color);
@@ -201,24 +307,6 @@ This should make all the back buttons have a consistent background color that ma
   border-color: var(--secondary-color);
   color: white;
 }
-```
-
-## Result:
-All back buttons throughout the application now have:
-- **Default state**: Light gray background (`var(--surface-hover)`) with secondary border color
-- **Hover state**: Darker gray background (`var(--secondary-color)`) with white text
-
-This creates a consistent visual style for all navigation back buttons across:
-- Login page
-- Register page  
-- Analytics page
-- Templates page
-- Reminders page
-- Company/Client configuration pages
-- Invoice pages
-- And any other pages with back buttons
-
-The background color matches the hover color that was previously only shown on hover, providing better visual consistency and user experience! 🎉</result>
 
 /* Cards */
 .card {

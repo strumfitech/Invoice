@@ -85,6 +85,31 @@ const resources = {
       "auth.no_account": "Nu ai cont?",
       "auth.have_account": "Ai deja cont?",
 
+      // Landing Page
+      "landing.hero_title": "iFactura",
+      "landing.hero_subtitle": "Aplicația modernă pentru gestionarea facturilor. Simplu, rapid și complet offline.",
+      "landing.hero_description": "Creează facturi profesionale, calculează TVA automat și exportă în PDF. Totul stocat sigur pe dispozitivul tău.",
+      "landing.start_free": "Începe Gratuit",
+      "landing.sign_in": "Conectează-te",
+      "landing.main_features": "Funcționalități Principale",
+      "landing.features_subtitle": "Tot ce ai nevoie pentru facturarea profesională",
+      "landing.offline_title": "Offline Complet",
+      "landing.offline_desc": "Funcționează fără conexiune la internet. Datele tale rămân private și sigure pe dispozitiv.",
+      "landing.fast_title": "Rapid și Intuitiv",
+      "landing.fast_desc": "Interfață modernă pentru crearea facturilor în câteva minute. Template-uri profesionale incluse.",
+      "landing.secure_title": "Securitate Maximă",
+      "landing.secure_desc": "Stocare locală criptată. Nicio dată nu părăsește dispozitivul tău. Confidențialitate 100%.",
+      "landing.why_title": "De ce iFactura?",
+      "landing.management_title": "💼 Gestionare Completă",
+      "landing.management_desc": "Adăugă produse nelimitate, calculează TVA automat, gestionează clienți și exportă în PDF sau previzualizează online.",
+      "landing.design_title": "🎨 Design Profesional",
+      "landing.design_desc": "Facturi cu aspect modern și profesional, ușor de citit și perfect pentru prezentare clienților.",
+      "landing.reports_title": "📊 Rapoarte și Istoric",
+      "landing.reports_desc": "Vizualizează toate facturile create, caută rapid și menține un istoric complet al activității.",
+      "landing.cta_title": "Gata să Digitalizezi Facturarea?",
+      "landing.cta_subtitle": "Alătură-te mii de afaceri care economisesc timp și bani cu iFactura.",
+      "landing.start_now": "Începe Acum - Gratuit",
+
       // Auth Errors
       "auth.error.email_already_in_use": "Acest email este deja înregistrat",
       "auth.error.weak_password": "Parola este prea slabă. Vă rugăm să folosiți cel puțin 6 caractere",
@@ -544,7 +569,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: 'ro',
+    fallbackLng: 'en',
+    lng: 'en', // Force English as default language
     debug: false,
 
     interpolation: {

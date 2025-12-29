@@ -6,7 +6,7 @@ export default function Landing() {
   const { t } = useTranslation();
 
   return (
-    <div style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
+    <div style={{ backgroundColor: '#ffffff', color: 'black',minHeight: '100vh' }}>
       {/* Hero Section */}
       <section style={{ backgroundColor: '#6E5B78', color: 'white', padding: '80px 0' }}>
         <div className="container">
@@ -39,8 +39,8 @@ export default function Landing() {
       <section className="py-5">
         <div className="container">
           <div className="text-center mb-5">
-            <h2 className="fw-bold">{t('landing.main_features')}</h2>
-            <p className="text-muted">{t('landing.features_subtitle')}</p>
+            <h2 className="fw-bold" style={{ color: 'black' }}>{t('landing.main_features')}</h2>
+            <p>{t('landing.features_subtitle')}</p>
           </div>
           <div className="row g-4">
             <div className="col-md-4">
@@ -50,7 +50,7 @@ export default function Landing() {
                     📱
                   </div>
                   <h5 className="card-title fw-bold">{t('landing.offline_title')}</h5>
-                  <p className="card-text text-muted">
+                  <p className="card-text">
                     {t('landing.offline_desc')}
                   </p>
                 </div>
@@ -63,7 +63,7 @@ export default function Landing() {
                     ⚡
                   </div>
                   <h5 className="card-title fw-bold">{t('landing.fast_title')}</h5>
-                  <p className="card-text text-muted">
+                  <p className="card-text">
                     {t('landing.fast_desc')}
                   </p>
                 </div>
@@ -76,7 +76,7 @@ export default function Landing() {
                     🔒
                   </div>
                   <h5 className="card-title fw-bold">{t('landing.secure_title')}</h5>
-                  <p className="card-text text-muted">
+                  <p className="card-text">
                     {t('landing.secure_desc')}
                   </p>
                 </div>
@@ -87,11 +87,11 @@ export default function Landing() {
       </section>
 
       {/* Benefits Section */}
-      <section style={{ backgroundColor: '#e9ecef', padding: '60px 0' }}>
+      <section style={{ backgroundColor: '#e9ecef', color: 'black', padding: '60px 0' }}>
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-6">
-              <h2 className="fw-bold mb-4">{t('landing.why_title')}</h2>
+              <h2 className="fw-bold mb-4" style={{ color: 'black'}}>{t('landing.why_title')}</h2>
               <div className="mb-3">
                 <h5 className="text-primary">{t('landing.management_title')}</h5>
                 <p>{t('landing.management_desc')}</p>
@@ -115,8 +115,8 @@ export default function Landing() {
       {/* CTA Section */}
       <section className="py-5">
         <div className="container text-center">
-          <h2 className="fw-bold mb-3">{t('landing.cta_title')}</h2>
-          <p className="lead mb-4 text-muted">
+          <h2 className="fw-bold mb-3" style={{ color: 'black' }}>{t('landing.cta_title')}</h2>
+          <p className="lead mb-4">
             {t('landing.cta_subtitle')}
           </p>
           <Link to="/register" className="btn btn-lg px-5 py-3 fw-bold" style={{ backgroundColor: '#6E5B78', color: 'white' }}>
