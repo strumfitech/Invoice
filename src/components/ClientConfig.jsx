@@ -120,6 +120,7 @@ const fetchCompanyData = async () => {
   const editClient = (index) => {
     setForm(clients[index]);
     setEditing(index);
+    setShowDetails(true); // Automatically show all fields when editing
   };
 
   const deleteClient = async (clientId) => {

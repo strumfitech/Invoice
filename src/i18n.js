@@ -487,6 +487,8 @@ const resources = {
       "client.registration_code": "Registration Code",
       "client.fetch_data": "Fetch Data",
       "client.searching": "Searching...",
+      "client.confirm_delete": "Confirm Delete",
+      "client.delete_confirmation": "Are you sure you want to delete this client?",
 
       // Invoice List
       "invoice_list.title": "Invoice History",
