@@ -141,7 +141,7 @@ export default function Home(){
           <div className="col-md-4">
             <div className="card text-center border-0 shadow-sm">
               <div className="card-body">
-                <div className="display-4 fw-bold text-primary mb-2">{stats.totalInvoices}</div>
+                <div className="display-6 fw-bold text-primary mb-2">{stats.totalInvoices}</div>
                 <div className="text-muted">{t('stats.total_invoices')}</div>
               </div>
             </div>

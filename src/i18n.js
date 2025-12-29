@@ -256,7 +256,7 @@ const resources = {
   en: {
     translation: {
       // Navigation
-      "nav.new_invoice": "New Invoice",
+      "nav.new_invoice": "Create",
       "nav.invoices": "Invoice History",
       "nav.analytics": "Analytics",
       "nav.settings": "Settings",
@@ -269,12 +269,12 @@ const resources = {
 
       // Dashboard
       "dashboard.title": "Manage invoices easily",
-      "dashboard.new_invoice": "New Invoice",
-      "dashboard.new_invoice_desc": "Create invoices quickly",
+      "dashboard.new_invoice": "Create",
+      "dashboard.new_invoice_desc": "Create invoices",
       "dashboard.clients": "Clients",
       "dashboard.clients_desc": "Manage your clients",
       "dashboard.companies": "Company",
-      "dashboard.companies_desc": "Configure your company",
+      "dashboard.companies_desc": "Company configuration",
       "dashboard.templates": "Templates",
       "dashboard.templates_desc": "Customize the design",
       "dashboard.analytics": "Analytics",
