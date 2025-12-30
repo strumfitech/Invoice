@@ -8,8 +8,20 @@ const app = express();
 /* ======================
    CORS
 ====================== */
-app.use(cors({ origin: true }));
-app.use(express.json());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://genereazafactura.netlify.app",
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
+// IMPORTANT – răspunde la preflight
+app.options("*", cors());
+
 
 /* ======================
    TEST

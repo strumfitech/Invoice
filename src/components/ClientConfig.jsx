@@ -4,7 +4,8 @@ import { useAuth } from './AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const API_URL = '/api/getFirmaByCUI';
+const API_URL =
+  'https://us-central1-factura-b478b.cloudfunctions.net/api/getFirmaByCUI';
 
 export default function ClientConfig() {
   const [clients, setClients] = useState([]);
