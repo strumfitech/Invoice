@@ -11,31 +11,25 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // Default to dark mode (true) unless 'light' is explicitly saved
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme === 'light' ? false : true;
+  });
 
   useEffect(() => {
-    // Load theme preference from localStorage
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setIsDarkMode(true);
+    // Apply theme on mount and whenever isDarkMode changes
+    if (isDarkMode) {
       document.documentElement.setAttribute('data-bs-theme', 'dark');
     } else {
-      setIsDarkMode(false);
       document.documentElement.removeAttribute('data-bs-theme');
     }
-  }, []);
+  }, [isDarkMode]);
 
   const toggleTheme = () => {
     const newTheme = !isDarkMode;
     setIsDarkMode(newTheme);
-
-    if (newTheme) {
-      document.documentElement.setAttribute('data-bs-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-bs-theme');
-      localStorage.setItem('theme', 'light');
-    }
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
   };
 
   return (

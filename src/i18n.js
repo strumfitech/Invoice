@@ -178,6 +178,34 @@ const resources = {
       "invoice_list.confirm_delete": "Confirmare Ștergere",
       "invoice_list.delete_confirmation": "Ești sigur că vrei să ștergi factura",
 
+      // Invoice Preview
+      "invoice_preview.not_found_title": "Factura negăsită",
+      "invoice_preview.not_found_body": "Factura cu ID-ul {{id}} nu a fost găsită în istoric.",
+      "invoice_preview.back_to_history": "Înapoi la Istoric",
+      "invoice_preview.generated_on": "Generată la data de",
+      "invoice_preview.export_pdf": "Export PDF",
+      "invoice_preview.print": "Printează",
+      "invoice_preview.supplier": "Furnizor",
+      "invoice_preview.recipient": "Destinatar",
+      "invoice_preview.account": "Cont",
+      "invoice_preview.cui": "CUI",
+      "invoice_preview.invoice_label": "FACTURĂ",
+      "invoice_preview.number_label": "Nr.",
+      "invoice_preview.value": "Valoare",
+      "invoice_preview.subtotal": "Subtotal",
+      "invoice_preview.vat": "TVA",
+      "invoice_preview.quick_actions": "Acțiuni Rapide",
+      "invoice_preview.download_pdf": "Descarcă PDF",
+      "invoice_preview.print_invoice": "Printează Factura",
+      "invoice_preview.preview_image": "Previzualizare Imagine",
+      "invoice_preview.view_mode_detailed": "Mod afișare: Detaliat",
+      "invoice_preview.view_mode_fit": "Mod afișare: Încadrează",
+      "invoice_preview.quick_summary": "Sumar Rapid",
+      "invoice_preview.total_vat": "Total TVA",
+      "invoice_preview.preview_title": "Preview Factură",
+      "invoice_preview.preview_alt": "Preview Factură",
+      "invoice_preview.close": "Închide",
+
       // Analytics
       "analytics.title": "Analytics Dashboard",
       "analytics.back": "Înapoi la Dashboard",
@@ -501,6 +529,34 @@ const resources = {
       "invoice_list.confirm_delete": "Confirm Delete",
       "invoice_list.delete_confirmation": "Are you sure you want to delete invoice",
 
+      // Invoice Preview
+      "invoice_preview.not_found_title": "Invoice not found",
+      "invoice_preview.not_found_body": "Invoice with ID {{id}} was not found in history.",
+      "invoice_preview.back_to_history": "Back to History",
+      "invoice_preview.generated_on": "Generated on",
+      "invoice_preview.export_pdf": "Export PDF",
+      "invoice_preview.print": "Print",
+      "invoice_preview.supplier": "Supplier",
+      "invoice_preview.recipient": "Recipient",
+      "invoice_preview.account": "Account",
+      "invoice_preview.cui": "CUI",
+      "invoice_preview.invoice_label": "INVOICE",
+      "invoice_preview.number_label": "No.",
+      "invoice_preview.value": "Value",
+      "invoice_preview.subtotal": "Subtotal",
+      "invoice_preview.vat": "VAT",
+      "invoice_preview.quick_actions": "Quick Actions",
+      "invoice_preview.download_pdf": "Download PDF",
+      "invoice_preview.print_invoice": "Print Invoice",
+      "invoice_preview.preview_image": "Preview Image",
+      "invoice_preview.view_mode_detailed": "View mode: Detailed",
+      "invoice_preview.view_mode_fit": "View mode: Fit",
+      "invoice_preview.quick_summary": "Quick Summary",
+      "invoice_preview.total_vat": "Total VAT",
+      "invoice_preview.preview_title": "Invoice Preview",
+      "invoice_preview.preview_alt": "Invoice Preview",
+      "invoice_preview.close": "Close",
+
       // Analytics
       "analytics.title": "Analytics Dashboard",
       "analytics.back": "Back to Dashboard",
@@ -571,8 +627,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: 'en',
-    lng: 'en', // Force English as default language
+    fallbackLng: 'ro',
     debug: false,
 
     interpolation: {

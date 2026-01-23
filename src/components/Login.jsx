@@ -35,37 +35,56 @@ export default function Login() {
 
   return (
     <div className="container py-5">
-      <div className="mb-3">
-        <button className="btn btn-outline-secondary" onClick={() => navigate('/')}>
-          {t('auth.back')}
-        </button>
-      </div>
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <h2 className="text-center mb-4">{t('auth.login')}</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label className="form-label">{t('auth.email')}</label>
-              <input
-                type="email"
-                className="form-control"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+      <div className="row justify-content-center pt-5">
+        <div className="col-md-5">
+          <div className="glass-card p-5">
+            <div className="text-center mb-4">
+              <div className="btn-neon d-inline-flex p-3 mb-3">
+                <span style={{ fontSize: '2rem' }}>📄</span>
+              </div>
+              <h2 className="fw-bold">{t('auth.login')}</h2>
+              <p className="text-dimmed">Continuă în universul iFactura</p>
             </div>
-            <div className="mb-3">
-              <label className="form-label">{t('auth.password')}</label>
-              <PasswordInput
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder={t('auth.password')}
-                required
-              />
-            </div>
-            {error && <div className="alert alert-danger">{error}</div>}
-            <button type="submit" className="btn btn-primary w-100">{t('auth.login')}</button>
-          </form>
+
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="form-label small text-dimmed">{t('auth.email')}</label>
+                <input
+                  type="email"
+                  className="form-control input-2026"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="form-label small text-dimmed">{t('auth.password')}</label>
+                <PasswordInput
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={t('auth.password')}
+                  required
+                  className="input-2026"
+                />
+              </div>
+
+              {error && (
+                <div className="alert border-0 bg-danger bg-opacity-10 text-danger mb-4 small">
+                  {error}
+                </div>
+              )}
+
+              <button type="submit" className="btn-neon w-100 py-3 mb-4">
+                {t('auth.login')}
+              </button>
+
+              <div className="text-center">
+                <span className="text-dimmed small">Nu ai cont? </span>
+                <a href="/register" className="small text-decoration-none" style={{ color: 'var(--accent-secondary)' }}>Creează unul</a>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

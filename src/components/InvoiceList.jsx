@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from './AuthContext.jsx';
 import { useTranslation } from 'react-i18next';
 
-export default function InvoiceList(){
+export default function InvoiceList() {
   const [invoices, setInvoices] = useState([]);
   const [query, setQuery] = useState('');
   const [deleteModal, setDeleteModal] = useState(false);
@@ -12,7 +12,7 @@ export default function InvoiceList(){
   const { user } = useAuth();
   const { t } = useTranslation();
 
-  useEffect(()=>{
+  useEffect(() => {
     if (user) {
       loadInvoices();
     }
@@ -41,7 +41,7 @@ export default function InvoiceList(){
     }
   };
 
-  const exportInvoices = ()=>{
+  const exportInvoices = () => {
     const blob = new Blob([JSON.stringify(invoices, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -53,7 +53,7 @@ export default function InvoiceList(){
     URL.revokeObjectURL(url);
   };
 
-  const exportSingleInvoice = (inv)=> {
+  const exportSingleInvoice = (inv) => {
     const blob = new Blob([JSON.stringify(inv, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -73,36 +73,50 @@ export default function InvoiceList(){
   });
 
   return (
-    <div className="container py-5">
-      <h2>{t('invoice_list.title')}</h2>
-      <div className="mb-3">
-        <input className="form-control" placeholder={t('invoice_list.search')} value={query} onChange={e=>setQuery(e.target.value)} />
+    <div className="py-2">
+      <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div className="flex-grow-1" style={{ minWidth: '300px' }}>
+          <input
+            className="input-2026 w-100"
+            placeholder={t('invoice_list.search')}
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+          />
+        </div>
+        <button className="btn glass-card py-2 px-4 fw-bold" onClick={exportInvoices}>
+          📤 {t('invoice_list.export')}
+        </button>
       </div>
-      <div className="mb-3">
-        <button className="btn btn-outline-secondary" onClick={exportInvoices}>{t('invoice_list.export')}</button>
-      </div>
+
       {filtered.length === 0 ? (
-        <p>{t('invoice_list.no_invoices')}</p>
+        <div className="text-center py-5 glass-card">
+          <p className="text-dimmed mb-0">{t('invoice_list.no_invoices')}</p>
+        </div>
       ) : (
-        <div className="row">
+        <div className="row g-4">
           {filtered.map(inv => (
-            <div key={inv.id} className="col-12 col-md-6 mb-4">
-              <div className="card h-100">
-                <div className="card-body d-flex flex-column">
-                  <div className="flex-grow-1">
-                    <h5 className="card-title">{t('common.invoice')} {inv.id}</h5>
-                    <p className="card-text">
-                      {t('common.date')}: {new Date(inv.date).toLocaleString()}<br />
-                      {t('common.total')}: {Number(inv.total).toFixed(2)} {inv.currency}
-                    </p>
+            <div key={inv.id} className="col-12 col-md-6 col-xl-4">
+              <div className="glass-card p-4 h-100">
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  <div>
+                    <h5 className="fw-bold mb-1">#{inv.id}</h5>
+                    <p className="text-dimmed small mb-0">{new Date(inv.date).toLocaleDateString()}</p>
                   </div>
-                  <div className="mt-auto">
-                    <div className="d-flex gap-2 justify-content-center">
-                      <Link to={`/invoice/${inv.id}/preview`} className="btn btn-primary">{t('invoice_list.preview')}</Link>
-                      <button className="btn btn-success" onClick={()=>exportSingleInvoice(inv)}>{t('invoice_list.export_single')}</button>
-                      <button className="btn btn-danger" onClick={() => { setInvoiceToDelete(inv); setDeleteModal(true); }}>{t('invoice_list.delete')}</button>
-                    </div>
+                  <div className="stat-glow h5 mb-0">
+                    {Number(inv.total).toFixed(2)} <span className="small">{inv.currency}</span>
                   </div>
+                </div>
+
+                <div className="d-flex gap-2 mt-4">
+                  <Link to={`/invoice/${inv.id}/preview`} className="btn-neon flex-grow-1 text-center py-2 text-decoration-none">
+                    🔎 {t('invoice_list.preview')}
+                  </Link>
+                  <button className="btn glass-card p-2" onClick={() => exportSingleInvoice(inv)} title={t('invoice_list.export_single')}>
+                    💾
+                  </button>
+                  <button className="btn glass-card p-2 text-danger" onClick={() => { setInvoiceToDelete(inv); setDeleteModal(true); }} title={t('invoice_list.delete')}>
+                    🗑️
+                  </button>
                 </div>
               </div>
             </div>
@@ -113,17 +127,17 @@ export default function InvoiceList(){
       {/* Delete Confirmation Modal */}
       <div className={`modal fade ${deleteModal ? 'show' : ''}`} style={{ display: deleteModal ? 'block' : 'none' }} tabIndex="-1">
         <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">{t('invoice_list.confirm_delete')}</h5>
-              <button type="button" className="btn-close" onClick={() => setDeleteModal(false)}></button>
+          <div className="modal-content glass-card border-0" style={{ background: 'var(--bg-dark)' }}>
+            <div className="modal-header border-0">
+              <h5 className="modal-title fw-bold">{t('invoice_list.confirm_delete')}</h5>
+              <button type="button" className="btn-close btn-close-white" onClick={() => setDeleteModal(false)}></button>
             </div>
             <div className="modal-body">
-              <p>{t('invoice_list.delete_confirmation')} {invoiceToDelete?.id}?</p>
+              <p className="text-dimmed">{t('invoice_list.delete_confirmation')} <span className="text-white fw-bold">#{invoiceToDelete?.id}</span>?</p>
             </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary px-4 py-2" onClick={() => setDeleteModal(false)}>{t('common.no')}</button>
-              <button type="button" className="btn btn-danger px-4 py-2" onClick={confirmDelete}>{t('common.yes')}</button>
+            <div className="modal-footer border-0">
+              <button type="button" className="btn glass-card px-4" onClick={() => setDeleteModal(false)}>{t('common.no')}</button>
+              <button type="button" className="btn btn-danger px-4" onClick={confirmDelete}>{t('common.yes')}</button>
             </div>
           </div>
         </div>
